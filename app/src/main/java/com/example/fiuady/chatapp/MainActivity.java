@@ -22,9 +22,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.stetho.Stetho;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -35,11 +47,25 @@ class User {
     private String phoneNumber;
     private String password;
 
-    public int getId(){return id; }
-    public String getFirstName(){ return firstName;}
-    public String getLastName(){ return lastName;}
-    public String getPhoneNumber(){ return phoneNumber;}
-    public String getPassword(){ return password;}
+    public int getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 
 
     public User(int id, String firstName, String lastName, String phoneNumber, String password) {
@@ -51,9 +77,9 @@ class User {
     }
 }
 
-class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
+class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
-    static class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView rvFirstName;
         private TextView rvLastName;
@@ -68,7 +94,7 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
             rvLastName = itemView.findViewById(R.id.last_name_text);
             rvPhoneNumber = itemView.findViewById(R.id.phone_number_text);
             rvId = itemView.findViewById(R.id.hided_user_id);
-            context  = itemView.getContext();
+            context = itemView.getContext();
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
         }
@@ -78,7 +104,7 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
             //nothing
         }
 
-        public void bind(User users){
+        public void bind(User users) {
             this.user = users;
             rvFirstName.setText(users.getFirstName());
             rvLastName.setText(users.getLastName());
@@ -123,11 +149,25 @@ class Chat {
     //private String phoneNumber;
     //private String password;
 
-    public int getContactId(){return contactId; }
-    public String getFirstName(){ return firstName;}
-    public String getLastName(){ return lastName;}
-    public String getLastMessage(){ return lastMessage;}
-    public String getDate() { return date; }
+    public int getContactId() {
+        return contactId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public String getDate() {
+        return date;
+    }
 
     public Chat(int contactId, String firstName, String lastName, String lastMessage, String date) {
         this.contactId = contactId;
@@ -138,9 +178,9 @@ class Chat {
     }
 }
 
-class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
+class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
-    static class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView rvContactId;
         private TextView rvFirstName;
@@ -158,7 +198,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
             rvLastMessage = itemView.findViewById(R.id.last_message_text);
             rvDate = itemView.findViewById(R.id.date_text);
 
-            context  = itemView.getContext();
+            context = itemView.getContext();
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
         }
@@ -168,11 +208,11 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra(ChatActivity.EXTRA_HIDED_ID, rvContactId.getText().toString());
             intent.putExtra(ChatActivity.EXTRA_SIMPLE_CHAT, true);
-            ((Activity)context).startActivityForResult(intent, 0X01);
+            ((Activity) context).startActivityForResult(intent, 0X01);
 
         }
 
-        public void bind(Chat chats){
+        public void bind(Chat chats) {
             this.chat = chats;
             rvContactId.setText(String.valueOf(chats.getContactId()));
             rvFirstName.setText(chats.getFirstName());
@@ -208,18 +248,32 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>{
     }
 }
 
-class Message{
+class Message {
     private int id;
     private String message;
     private int sender_id;
     private int receiver_id;
     private String date;
 
-    public int getId() { return id; }
-    public String getMessage() { return message; }
-    public int getSender_id() { return sender_id; }
-    public int getReceiver_id() { return receiver_id; }
-    public String getDate() { return date; }
+    public int getId() {
+        return id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getSender_id() {
+        return sender_id;
+    }
+
+    public int getReceiver_id() {
+        return receiver_id;
+    }
+
+    public String getDate() {
+        return date;
+    }
 
     public Message(int id, String message, int sender_id, int receiver_id, String date) {
         this.id = id;
@@ -243,7 +297,7 @@ class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            context  = itemView.getContext();
+            context = itemView.getContext();
             rvMessage = itemView.findViewById(R.id.rv_message_tv);
             rvDate = itemView.findViewById(R.id.rv_date_tv);
             rvBubble = itemView.findViewById(R.id.chat_bubble);
@@ -253,12 +307,11 @@ class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
             this.message = messages;
             rvMessage.setText(messages.getMessage());
             rvDate.setText(messages.getDate());
-            if(message.getSender_id() == ActualUser.id){
+            if (message.getSender_id() == ActualUser.id) {
                 //rvMessage.setTextColor(Color.BLUE);
                 rvMessage.setGravity(Gravity.RIGHT);
                 rvBubble.setScaleX(-1);
-            }
-            else if (message.getSender_id() != ActualUser.id){
+            } else if (message.getSender_id() != ActualUser.id) {
                 //rvMessage.setTextColor(Color.GREEN);
                 rvMessage.setGravity(Gravity.LEFT);
                 rvBubble.setScaleX(1);
@@ -268,7 +321,7 @@ class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
     private List<Message> messages;
 
-    public MessagesAdapter(List<Message> messages){
+    public MessagesAdapter(List<Message> messages) {
         super();
         this.messages = messages;
     }
@@ -290,7 +343,7 @@ class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
     }
 }
 
-class Group{
+class Group {
     private int id;
     private String name;
     private String lastMessage;
@@ -322,9 +375,9 @@ class Group{
     }
 }
 
-class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder>{
+class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder> {
 
-    static class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView rvId;
         private TextView rvName;
@@ -340,7 +393,7 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder>{
             rvLastMessage = itemView.findViewById(R.id.last_group_message_text);
             rvDate = itemView.findViewById(R.id.group_date_text);
 
-            context  = itemView.getContext();
+            context = itemView.getContext();
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
         }
@@ -350,11 +403,11 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder>{
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra(ChatActivity.EXTRA_HIDED_GROUP_ID, rvId.getText().toString());
             intent.putExtra(ChatActivity.EXTRA_SIMPLE_CHAT, false);
-            ((Activity)context).startActivityForResult(intent, 0X02);
+            ((Activity) context).startActivityForResult(intent, 0X02);
 
         }
 
-        public void bind(Group groups){
+        public void bind(Group groups) {
             this.group = groups;
             rvId.setText(String.valueOf(groups.getId()));
             rvName.setText(groups.getName());
@@ -389,7 +442,7 @@ class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder>{
     }
 }
 
-class GroupMessage{
+class GroupMessage {
     private int id;
     private String sender_name;
     private String message;
@@ -439,7 +492,7 @@ class GroupMessagesAdapter extends RecyclerView.Adapter<GroupMessagesAdapter.Vie
 
         public ViewHolder(View itemView) {
             super(itemView);
-            context  = itemView.getContext();
+            context = itemView.getContext();
             rvSenderName = itemView.findViewById(R.id.rv_group_contact_name_tv);
             rvMessage = itemView.findViewById(R.id.rv_group_message_tv);
             rvDate = itemView.findViewById(R.id.rv_group_date_tv);
@@ -451,12 +504,11 @@ class GroupMessagesAdapter extends RecyclerView.Adapter<GroupMessagesAdapter.Vie
             rvSenderName.setText(groupMessages.getSender_name());
             rvMessage.setText(groupMessages.getMessage());
             rvDate.setText(groupMessages.getDate());
-            if(groupMessages.getSender_id() == ActualUser.id){
+            if (groupMessages.getSender_id() == ActualUser.id) {
                 //rvMessage.setTextColor(Color.BLUE);
                 rvMessage.setGravity(Gravity.RIGHT);
                 rvBubble.setScaleX(-1);
-            }
-            else if (groupMessages.getSender_id() != ActualUser.id){
+            } else if (groupMessages.getSender_id() != ActualUser.id) {
                 //rvMessage.setTextColor(Color.GREEN);
                 rvMessage.setGravity(Gravity.LEFT);
                 rvBubble.setScaleX(1);
@@ -466,7 +518,7 @@ class GroupMessagesAdapter extends RecyclerView.Adapter<GroupMessagesAdapter.Vie
 
     private List<GroupMessage> groupMessages;
 
-    public GroupMessagesAdapter(List<GroupMessage> groupMessages){
+    public GroupMessagesAdapter(List<GroupMessage> groupMessages) {
         super();
         this.groupMessages = groupMessages;
     }
@@ -502,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
     private int originPort;
     private int destinyId;
 
-    private boolean checkExistingUser(){
+    private boolean checkExistingUser() {
         boolean la = false;
         boolean name_check = false;
         boolean pass_check = false;
@@ -510,19 +562,58 @@ public class MainActivity extends AppCompatActivity {
         String log_pass = user_pass.getText().toString();
         int max_user_id = db.usersDao().getMaxId();
 
-        for(int i = 0; i <= max_user_id; i++){
-            if(log_name.equals(db.usersDao().getFirstNameById(i))){
+        for (int i = 0; i <= max_user_id; i++) {
+            if (log_name.equals(db.usersDao().getFirstNameById(i))) {
                 name_check = true;
             }
         }
-        for(int i = 0; i <= max_user_id; i++){
-            if(log_pass.equals(db.usersDao().getPasswordById(i))){
+        for (int i = 0; i <= max_user_id; i++) {
+            if (log_pass.equals(db.usersDao().getPasswordById(i))) {
                 pass_check = true;
             }
         }
-        if(name_check && pass_check){ la = true; }
+        if (name_check && pass_check) {
+            la = true;
+        }
         return la;
     }
+
+    private String server_url = "https://api.myjson.com/bins/e684u";
+
+
+    public JSONObject makingJson(){
+        JSONObject js = new JSONObject();
+        try {
+            js.put("User", user_name.getText());
+            js.put("Password", user_pass.getText());
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return js;
+    }
+    public void sendJsonRequest() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, server_url, makingJson(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(MainActivity.this, "Response"+response, Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(jsonRequest);
+
+}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -533,7 +624,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = ChatDatabase.getDatabase(MainActivity.this);
 
-        UsersTable uno =  db.usersDao().getUserByLastName("Chan");
+        UsersTable uno = db.usersDao().getUserByLastName("Chan");
         uno.setFirstName("Jose");
         db.usersDao().UpdateUser(uno);
 
@@ -555,13 +646,16 @@ public class MainActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkExistingUser()){
+                if (checkExistingUser()) {
                     ActualUser.id = db.usersDao().getIdByFirstName(user_name.getText().toString());
                     Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
+                    makingJson();
+                    sendJsonRequest();
                     //intent.putExtra(NavigationMenu.EXTRA_USER_ID, String.valueOf(db.usersDao().getIdByFirstName(user_name.getText().toString())));
                     startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "Usuario o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
                 }
-                else {Toast.makeText(MainActivity.this,"Usuario o Contraseña incorrectos",Toast.LENGTH_SHORT).show(); }
                 user_name.setText("");
                 user_pass.setText("");
                 //user_name.findFocus();
