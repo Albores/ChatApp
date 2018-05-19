@@ -17,6 +17,9 @@ public interface ChatDao {
     @Query("SELECT * FROM users WHERE last_name LIKE :last_name") //referencia a un parámetro con autocompletar
     UsersTable getUserByLastName(String last_name);
 
+    @Query("SELECT * FROM users WHERE first_name LIKE :first_name") //referencia a un parámetro con autocompletar
+    UsersTable getUserByFirstName(String first_name);
+
     @Query("SELECT * FROM users WHERE id in (:ids)")
     List<UsersTable> getUserById(int[] ids);
 

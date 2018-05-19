@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 
 class User {
     private int id;
@@ -574,7 +574,7 @@ public class MainActivity extends AppCompatActivity {
         return la;
     }
 
-    private String server_url = "https://serverxd.herokuapp.com/api/users/validate";
+    private String server_url = "https://serverxd.herokuapp.com/api/users";
 
 
     public JSONObject makingJson(){
