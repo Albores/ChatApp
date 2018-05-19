@@ -1,16 +1,11 @@
 package com.example.fiuady.chatapp;
 
 import android.app.Activity;
-import android.app.Application;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -547,6 +542,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ChatDatabase db;
     private Button login_btn;
+    private TextView register_tv;
     private Button random_user;
     private EditText user_name;
     private EditText user_pass;
@@ -578,7 +574,7 @@ public class MainActivity extends AppCompatActivity {
         return la;
     }
 
-    private String server_url = "https://api.myjson.com/bins/e684u";
+    private String server_url = "https://serverxd.herokuapp.com/api/users/validate";
 
 
     public JSONObject makingJson(){
@@ -629,6 +625,7 @@ public class MainActivity extends AppCompatActivity {
         db.usersDao().UpdateUser(uno);
 
         login_btn = findViewById(R.id.login_btn);
+        register_tv = findViewById(R.id.logon_btn);
         user_name = findViewById(R.id.name_txt);
         user_pass = findViewById(R.id.pass_txt);
         random_user = findViewById(R.id.random_btn);
@@ -649,8 +646,7 @@ public class MainActivity extends AppCompatActivity {
                 if (checkExistingUser()) {
                     ActualUser.id = db.usersDao().getIdByFirstName(user_name.getText().toString());
                     Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
-                    makingJson();
-                    sendJsonRequest();
+
                     //intent.putExtra(NavigationMenu.EXTRA_USER_ID, String.valueOf(db.usersDao().getIdByFirstName(user_name.getText().toString())));
                     startActivity(intent);
                 } else {
@@ -662,6 +658,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        register_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makingJson();
+                sendJsonRequest();
+            }
+        });
 
     }
 
