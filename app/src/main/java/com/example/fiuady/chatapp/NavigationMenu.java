@@ -70,15 +70,15 @@ public class NavigationMenu extends AppCompatActivity {
 
     void fillChatsAdapter(){
         rv_chats_data.clear();
-        total_users = db.usersDao().getMaxId() + 1;
+        total_users = db.chatDao().getMaxIdUsers() + 1;
         for (int i = 0; i < total_users; i++){
-            if(db.messagesDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
+            if(db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
                 rv_chats_data.add(new Chat(
                         i,
-                        db.usersDao().getFirstNameById(i),
-                        db.usersDao().getLastNameById(i),
-                        db.messagesDao().getLastMessageOfContact(i, my_id),
-                        db.messagesDao().getLastDateOfContact(i, my_id)));
+                        db.chatDao().getFirstNameById(i),
+                        db.chatDao().getLastNameById(i),
+                        db.chatDao().getLastMessageOfContact(i, my_id),
+                        db.chatDao().getLastDateOfContact(i, my_id)));
             }
         }
         //Sorting by lastDate of lastMessage received or sent
@@ -95,14 +95,14 @@ public class NavigationMenu extends AppCompatActivity {
 
     void fillGroupsAdapter(){
         rv_groups_data.clear();
-        total_groups = db.groupsDao().getMaxId() + 1;
+        total_groups = db.chatDao().getMaxIdGroups() + 1;
         for (int i = 0; i < total_groups; i++){
-            if(db.groupMessagesDao().checkStartedGroup(i, my_id) > 0) {
+            if(db.chatDao().checkStartedGroup(i, my_id) > 0) {
                 rv_groups_data.add(new Group(
                         i,
-                        db.groupsDao().getNameById(i),
-                        db.groupMessagesDao().getLastMessageByGroupId(i),
-                        db.groupMessagesDao().getLastDateByGroupId(i)));
+                        db.chatDao().getGroupNameById(i),
+                        db.chatDao().getLastMessageByGroupId(i),
+                        db.chatDao().getLastDateByGroupId(i)));
             }
         }
         //Sorting by lastDate of lastMessage received or sent
@@ -118,16 +118,16 @@ public class NavigationMenu extends AppCompatActivity {
 
     void fillContactsAdapter(){
         //I'm using Users adapter and class to fill the information since I've not created the Contacts table
-        total_users = db.usersDao().getMaxId() + 1;
+        total_users = db.chatDao().getMaxIdUsers() + 1;
         rv_users_data.clear();
         for (int i = 0; i < total_users; i++){
             if(i != my_id){
                 rv_users_data.add(new User(
                         i,
-                        db.usersDao().getFirstNameById(i),
-                        db.usersDao().getLastNameById(i),
-                        db.usersDao().getPhoneNumberById(i),
-                        db.usersDao().getPasswordById(i)));
+                        db.chatDao().getFirstNameById(i),
+                        db.chatDao().getLastNameById(i),
+                        db.chatDao().getPhoneNumberById(i),
+                        db.chatDao().getPasswordById(i)));
             }
         }
         usersAdapter = new UsersAdapter((rv_users_data));
