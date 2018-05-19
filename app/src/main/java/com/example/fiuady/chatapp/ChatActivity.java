@@ -71,12 +71,12 @@ public class ChatActivity extends AppCompatActivity {
 //                    int json_sender_id = response.getInt("sender_id");
 //                    int json_receiver_id = response.getInt("receiver_id");
                     MessagesTable json_received_msg = new MessagesTable(
-                            db.messagesDao().getMaxMessagesId() + 1,
+                            db.chatDao().getMaxMessagesId() + 1,
                             json_message,
                             contactId,
                             ActualUser.id,
                             getCurrentDate());
-                    db.messagesDao().InsertMessage(json_received_msg);
+                    db.chatDao().InsertMessage(json_received_msg);
                     refreshChatAdapter();
                     rvChat.scrollToPosition(rv_messages_data.size() - 1);
                 } catch (JSONException e){
@@ -110,19 +110,19 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void fillChatAdapter(){
-        messages_qty = db.messagesDao().getMaxMessagesId() + 1;
+        messages_qty = db.chatDao().getMaxMessagesId() + 1;
         for (int i = 0; i < messages_qty; i++){
             //if(db.messagesDao().getSenderIdByMessageId(i) == contactId || db.messagesDao().getReceiverIdByMessageId(i) == contactId){
-            int sender_id = db.messagesDao().getSenderIdByMessageId(i);
-            int receiver_id = db.messagesDao().getReceiverIdByMessageId(i);
+            int sender_id = db.chatDao().getSenderIdByMessageId(i);
+            int receiver_id = db.chatDao().getReceiverIdByMessageId(i);
             if((sender_id == contactId && receiver_id == ActualUser.id) || (receiver_id == contactId && sender_id == ActualUser.id)) {
-                String msg = db.messagesDao().getMessageById(i);
+                String msg = db.chatDao().getMessageById(i);
                 rv_messages_data.add(new Message(
                         i,
                         msg,
-                        db.messagesDao().getSenderIdByMessageId(i),
-                        db.messagesDao().getReceiverIdByMessageId(i),
-                        db.messagesDao().getDateById(i)));
+                        db.chatDao().getSenderIdByMessageId(i),
+                        db.chatDao().getReceiverIdByMessageId(i),
+                        db.chatDao().getDateMessageById(i)));
             }
         }
         messagesAdapter = new MessagesAdapter(rv_messages_data);
@@ -133,18 +133,18 @@ public class ChatActivity extends AppCompatActivity {
     void refreshChatAdapter(){
         rv_messages_data.clear();
         new_rv_messages_data.clear();
-        messages_qty = db.messagesDao().getMaxMessagesId() + 1;
+        messages_qty = db.chatDao().getMaxMessagesId() + 1;
         for (int i = 0; i < messages_qty; i++){
-            int sender_id = db.messagesDao().getSenderIdByMessageId(i);
-            int receiver_id = db.messagesDao().getReceiverIdByMessageId(i);
+            int sender_id = db.chatDao().getSenderIdByMessageId(i);
+            int receiver_id = db.chatDao().getReceiverIdByMessageId(i);
             if((sender_id == contactId && receiver_id == ActualUser.id) || (receiver_id == contactId && sender_id == ActualUser.id)) {
-                String msg2 = db.messagesDao().getMessageById(i);
+                String msg2 = db.chatDao().getMessageById(i);
                 new_rv_messages_data.add(new Message(
                         i,
                         msg2,
-                        db.messagesDao().getSenderIdByMessageId(i),
-                        db.messagesDao().getReceiverIdByMessageId(i),
-                        db.messagesDao().getDateById(i)));
+                        db.chatDao().getSenderIdByMessageId(i),
+                        db.chatDao().getReceiverIdByMessageId(i),
+                        db.chatDao().getDateMessageById(i)));
             }
         }
         rv_messages_data.addAll(new_rv_messages_data);
@@ -152,16 +152,16 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void fillGroupAdapter(){
-        messages_qty = db.groupMessagesDao().getMaxId() + 1;
+        messages_qty = db.chatDao().getMaxIdMessageGroup() + 1;
         for (int i = 0; i < messages_qty; i++){
-            if(db.groupMessagesDao().getGroupIdByMsgId(i) == groupId) {
-                String msg = db.groupMessagesDao().getMessageById(i);
+            if(db.chatDao().getGroupIdByMsgId(i) == groupId) {
+                String msg = db.chatDao().getMessageById(i);
                 rv_group_messages_data.add(new GroupMessage(
                         i,
-                        db.usersDao().getFirstNameById(db.groupMessagesDao().getSenderIdByMessageId(i)) + " " + db.usersDao().getLastNameById(db.groupMessagesDao().getSenderIdByMessageId(i)),
+                        db.chatDao().getFirstNameById(db.chatDao().getSenderIdByMessageId(i)) + " " + db.chatDao().getLastNameById(db.chatDao().getSenderIdByMessageId(i)),
                         msg,
-                        db.groupMessagesDao().getSenderIdByMessageId(i),
-                        db.groupMessagesDao().getDateById(i)));
+                        db.chatDao().getSenderIdByMessageId(i),
+                        db.chatDao().getDateByIdMessageGroup(i)));
             }
         }
         groupMessagesAdapter = new GroupMessagesAdapter(rv_group_messages_data);
@@ -172,16 +172,16 @@ public class ChatActivity extends AppCompatActivity {
     void refreshGroupAdapter(){
         rv_group_messages_data.clear();
         new_rv_group_messages_data.clear();
-        messages_qty = db.groupMessagesDao().getMaxId() + 1;
+        messages_qty = db.chatDao().getMaxIdMessageGroup() + 1;
         for (int i = 0; i < messages_qty; i++){
-            if(db.groupMessagesDao().getGroupIdByMsgId(i) == groupId) {
-                String gp_msg2 = db.groupMessagesDao().getMessageById(i);
+            if(db.chatDao().getGroupIdByMsgId(i) == groupId) {
+                String gp_msg2 = db.chatDao().getMessageById(i);
                 rv_group_messages_data.add(new GroupMessage(
                         i,
-                        db.usersDao().getFirstNameById(db.groupMessagesDao().getSenderIdByMessageId(i)) + " " + db.usersDao().getLastNameById(db.groupMessagesDao().getSenderIdByMessageId(i)),
+                        db.chatDao().getFirstNameById(db.chatDao().getSenderIdByMessageId(i)) + " " + db.chatDao().getLastNameById(db.chatDao().getSenderIdByMessageId(i)),
                         gp_msg2,
-                        db.groupMessagesDao().getSenderIdByMessageId(i),
-                        db.groupMessagesDao().getDateById(i)));
+                        db.chatDao().getSenderIdByMessageId(i),
+                        db.chatDao().getDateByIdMessageGroup(i)));
             }
         }
         rv_group_messages_data.addAll(new_rv_group_messages_data);
@@ -208,13 +208,13 @@ public class ChatActivity extends AppCompatActivity {
         if(simpleChat){
             final String received_hided_id = intent.getStringExtra(ChatActivity.EXTRA_HIDED_ID);
             contactId = Integer.parseInt(received_hided_id);
-            tvContactName.setText(db.usersDao().getFirstNameById(contactId));
+            tvContactName.setText(db.chatDao().getFirstNameById(contactId));
             fillChatAdapter();//Getting data from database and setting to AdapterChats then recyclerView
         }
         else {
             final String received_hided_group_id = intent.getStringExtra(ChatActivity.EXTRA_HIDED_GROUP_ID);
             groupId = Integer.parseInt(received_hided_group_id);
-            tvContactName.setText(db.groupsDao().getNameById(groupId));
+            tvContactName.setText(db.chatDao().getGroupNameById(groupId));
             fillGroupAdapter();
         }
 
@@ -225,23 +225,23 @@ public class ChatActivity extends AppCompatActivity {
                 if(checkAcceptableField() && !toSendText.getText().toString().equals("Json")){
                     if(simpleChat){
                         MessagesTable msg = new MessagesTable(
-                                db.messagesDao().getMaxMessagesId() + 1,
+                                db.chatDao().getMaxMessagesId() + 1,
                                 toSendText.getText().toString(),
                                 ActualUser.id,
                                 contactId,
                                 getCurrentDate());
-                        db.messagesDao().InsertMessage(msg);
+                        db.chatDao().InsertMessage(msg);
                         refreshChatAdapter();
                         rvChat.scrollToPosition(rv_messages_data.size() - 1);
                     }
                     else {
                         GroupMessagesTable gp_msg = new GroupMessagesTable(
-                                db.groupMessagesDao().getMaxId() + 1,
+                                db.chatDao().getMaxIdMessageGroup() + 1,
                                 toSendText.getText().toString(),
                                 groupId,
                                 ActualUser.id,
                                 getCurrentDate());
-                        db.groupMessagesDao().InsertMessage(gp_msg);
+                        db.chatDao().InsertMessage(gp_msg);
                         refreshGroupAdapter();
                         rvChat.scrollToPosition(rv_group_messages_data.size() - 1);
                     }

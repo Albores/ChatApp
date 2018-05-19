@@ -556,15 +556,15 @@ public class MainActivity extends AppCompatActivity {
         boolean pass_check = false;
         String log_name = user_name.getText().toString();
         String log_pass = user_pass.getText().toString();
-        int max_user_id = db.usersDao().getMaxId();
+        int max_user_id = db.chatDao().getMaxIdUsers();
 
         for (int i = 0; i <= max_user_id; i++) {
-            if (log_name.equals(db.usersDao().getFirstNameById(i))) {
+            if (log_name.equals(db.chatDao().getFirstNameById(i))) {
                 name_check = true;
             }
         }
         for (int i = 0; i <= max_user_id; i++) {
-            if (log_pass.equals(db.usersDao().getPasswordById(i))) {
+            if (log_pass.equals(db.chatDao().getPasswordById(i))) {
                 pass_check = true;
             }
         }
@@ -620,9 +620,9 @@ public class MainActivity extends AppCompatActivity {
 
         db = ChatDatabase.getDatabase(MainActivity.this);
 
-        UsersTable uno = db.usersDao().getUserByLastName("Chan");
+        UsersTable uno = db.chatDao().getUserByLastName("Chan");
         uno.setFirstName("Jose");
-        db.usersDao().UpdateUser(uno);
+        db.chatDao().UpdateUser(uno);
 
         login_btn = findViewById(R.id.login_btn);
         register_tv = findViewById(R.id.logon_btn);
@@ -634,9 +634,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Random r = new Random();
-                int id_random = r.nextInt(db.usersDao().getMaxId() + 1);
-                user_name.setText(db.usersDao().getFirstNameById(id_random));
-                user_pass.setText(db.usersDao().getPasswordById(id_random));
+                int id_random = r.nextInt(db.chatDao().getMaxIdUsers() + 1);
+                user_name.setText(db.chatDao().getFirstNameById(id_random));
+                user_pass.setText(db.chatDao().getPasswordById(id_random));
             }
         });
 
@@ -644,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkExistingUser()) {
-                    ActualUser.id = db.usersDao().getIdByFirstName(user_name.getText().toString());
+                    ActualUser.id = db.chatDao().getIdByFirstName(user_name.getText().toString());
                     Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
 
                     //intent.putExtra(NavigationMenu.EXTRA_USER_ID, String.valueOf(db.usersDao().getIdByFirstName(user_name.getText().toString())));

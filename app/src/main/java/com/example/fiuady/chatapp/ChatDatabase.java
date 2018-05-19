@@ -12,21 +12,26 @@ import android.support.annotation.NonNull;
 
 public abstract class ChatDatabase extends RoomDatabase {
 
-    public abstract UsersDao usersDao();
-    public abstract MessagesDao messagesDao();
-    public abstract GroupsDao groupsDao();
-    public abstract GroupMessagesDao groupMessagesDao();
+    public abstract ChatDao chatDao();
 
-    private static ChatDatabase dbChat;
+//    public abstract UsersDao usersDao();
+//    public abstract MessagesDao messagesDao();
+//    public abstract GroupsDao groupsDao();
+//    public abstract GroupMessagesDao groupMessagesDao();
 
-    public static ChatDatabase getDatabase(final Context context) {
-        if (dbChat == null) {
-                    dbChat = Room.databaseBuilder(context.getApplicationContext(),
-                            ChatDatabase.class, "chatapp").allowMainThreadQueries().addCallback(new RoomDatabase.Callback() {
+    private static ChatDatabase Instance;
+
+    static ChatDatabase getDatabase(final Context context) {
+        if (Instance == null) {
+            synchronized (ChatDatabase.class) {
+                if (Instance == null) {
+                    Instance = Room.databaseBuilder(context, ChatDatabase.class, "whatchats").
+                            allowMainThreadQueries().addCallback(new RoomDatabase.Callback() {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
-
+                            //Valores iniciales de la DB
+                            //Chats usuarios
                             db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (0, 'Sara', 'Torres', '9991234567', '1234')");
                             db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (1, 'Gerardo', 'Canul', '9992764598', '1234')");
                             db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (2, 'Jorge', 'Albores', '9992468649', '1234')");
@@ -50,11 +55,15 @@ public abstract class ChatDatabase extends RoomDatabase {
                             db.execSQL("INSERT INTO group_messages(id, message, group_id, sender_id, date) VALUES (3, 'Jose me ha unido al grupo', 1, 3, '20180514 at 03:57 PM')");
                             db.execSQL("INSERT INTO group_messages(id, message, group_id, sender_id, date) VALUES (4, 'Jose me ha unido al grupo', 1, 2, '20180514 at 03:57 PM')");
                             db.execSQL("INSERT INTO group_messages(id, message, group_id, sender_id, date) VALUES (5, 'Jose me ha unido al grupo', 1, 5, '20180514 at 03:57 PM')");
+
                         }
                     }).build();
 
+
+                }
             }
-        return dbChat;
         }
+        return Instance;
+    }
 }
 
