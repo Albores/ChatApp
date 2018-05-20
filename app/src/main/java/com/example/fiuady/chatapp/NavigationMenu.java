@@ -70,11 +70,11 @@ public class NavigationMenu extends AppCompatActivity {
         }
     };
 
-    void fillChatsAdapter(){
+    void fillChatsAdapter() {
         rv_chats_data.clear();
         total_users = db.chatDao().getMaxIdUsers() + 1;
-        for (int i = 0; i < total_users; i++){
-            if(db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
+        for (int i = 0; i < total_users; i++) {
+            if (db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
                 rv_chats_data.add(new Chat(
                         i,
                         db.chatDao().getUserNameById(i),
@@ -95,11 +95,11 @@ public class NavigationMenu extends AppCompatActivity {
         recyclerContainer.setAdapter(chatsAdapter);
     }
 
-    void fillGroupsAdapter(){
+    void fillGroupsAdapter() {
         rv_groups_data.clear();
         total_groups = db.chatDao().getMaxIdGroups() + 1;
-        for (int i = 0; i < total_groups; i++){
-            if(db.chatDao().checkStartedGroup(i, my_id) > 0) {
+        for (int i = 0; i < total_groups; i++) {
+            if (db.chatDao().checkStartedGroup(i, my_id) > 0) {
                 rv_groups_data.add(new Group(
                         i,
                         db.chatDao().getGroupNameById(i),
@@ -118,12 +118,12 @@ public class NavigationMenu extends AppCompatActivity {
         recyclerContainer.setAdapter(groupsAdapter);
     }
 
-    void fillContactsAdapter(){
+    void fillContactsAdapter() {
         //I'm using Users adapter and class to fill the information since I've not created the Contacts table
         total_users = db.chatDao().getMaxIdUsers() + 1;
         rv_users_data.clear();
-        for (int i = 0; i < total_users; i++){
-            if(i != my_id){
+        for (int i = 0; i < total_users; i++) {
+            if (i != my_id) {
                 rv_users_data.add(new User(
                         i,
                         db.chatDao().getUserNameById(i),
@@ -152,37 +152,51 @@ public class NavigationMenu extends AppCompatActivity {
         fillChatsAdapter(); //Starts activity with chatsAdapter
 
 
-
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.options_menu,menu);
+        menuInflater.inflate(R.menu.options_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 0X01:
-                if (resultCode == RESULT_OK) {
-                    fillChatsAdapter();
-                }
-                break;
-            case 0x02:
-                if(resultCode == RESULT_OK){
-                    //fillGroupsAdapter();
-                }
-                break;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.opciones_menu:
+
+                return true;
+            case R.id.cerrar_sesion_menu:
+                UsersTable user = new UsersTable(0, "vacío","*****");
+                db.chatDao().UpdateUser(user);
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
             default:
-                //other activities
-                break;
+                return super.onOptionsItemSelected(item);
         }
     }
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, Intent data){
+            //super.onActivityResult(requestCode, resultCode, data);
+            switch (requestCode) {
+                case 0X01:
+                    if (resultCode == RESULT_OK) {
+                        fillChatsAdapter();
+                    }
+                    break;
+                case 0x02:
+                    if (resultCode == RESULT_OK) {
+                        //fillGroupsAdapter();
+                    }
+                    break;
+                default:
+                    //other activities
+                    break;
+            }
+        }
 
 
 }

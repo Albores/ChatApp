@@ -46,9 +46,12 @@ public class SplashActivity extends Activity {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, server_url, makingJson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(SplashActivity.this,response.optString("message"), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SplashActivity.this,response.optString("message"), Toast.LENGTH_SHORT).show();
                 if(response.optString("message").equals("ok")){
                     Intent intent = new Intent(SplashActivity.this, NavigationMenu.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
 
@@ -56,7 +59,7 @@ public class SplashActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SplashActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(SplashActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
             }
