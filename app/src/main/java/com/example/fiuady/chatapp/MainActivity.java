@@ -67,7 +67,7 @@ class User {
 
     public User(int id, String username, String password) {
         this.id = id;
-        this.username=username;
+        this.username = username;
         this.password = password;
     }
 }
@@ -568,33 +568,35 @@ public class MainActivity extends AppCompatActivity {
         return la;
     }
 
-    private String server_url = "https://serverxd.herokuapp.com/api/users";
+    private String URL_Usuarios = "https://serverxd.herokuapp.com/api/users";
+    private String URL_Validacion_Usuarios = "https://serverxd.herokuapp.com/api/users/validate";
 
-
-    public JSONObject makingJson(){
+    public JSONObject makingJson() {
         JSONObject js = new JSONObject();
         try {
             js.put("username", user_name.getText());
             js.put("password", user_pass.getText());
-            js.put("status","disponible");
-        }catch (JSONException e) {
+            js.put("status", "disponible");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return js;
     }
-    public void sendJsonRequest() {
+
+    public void sendJsonUserRequest(String URL) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, server_url, makingJson(), new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, URL, makingJson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(MainActivity.this, "Response"+response, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -603,8 +605,39 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         queue.add(jsonRequest);
+    }
 
-}
+    public void sendJsonUserValidateRequest(String URL) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, URL, makingJson(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+                if(response.optString("message").equals("ok")){
+                    UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString());
+                    db.chatDao().UpdateUser(user);
+                    Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(jsonRequest);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -638,18 +671,15 @@ public class MainActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkExistingUser()) {
-                    ActualUser.id = db.chatDao().getIdByUserName(user_name.getText().toString());
-                    Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
 
-                    //intent.putExtra(NavigationMenu.EXTRA_USER_ID, String.valueOf(db.usersDao().getIdByFirstName(user_name.getText().toString())));
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(MainActivity.this, "Usuario o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                }
-                user_name.setText("");
-                user_pass.setText("");
+                sendJsonUserValidateRequest(URL_Validacion_Usuarios);
+
+//                if (checkExistingUser()) {
+//                    ActualUser.id = db.chatDao().getIdByUserName(user_name.getText().toString());
+//                    finish();
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Usuario o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
+//                }
                 //user_name.findFocus();
             }
         });
@@ -657,10 +687,10 @@ public class MainActivity extends AppCompatActivity {
         register_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               UsersTable user = new UsersTable(0,user_name.getText().toString(),user_pass.getText().toString());
+                UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString());
                 db.chatDao().UpdateUser(user);
                 makingJson();
-                sendJsonRequest();
+                sendJsonUserRequest(URL_Usuarios);
             }
         });
 
