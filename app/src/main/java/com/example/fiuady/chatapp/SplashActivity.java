@@ -23,7 +23,7 @@ import java.util.Map;
 public class SplashActivity extends Activity {
     private ChatDatabase db;
     // Duración en milisegundos que se mostrará el splash
-    private final int DURACION_SPLASH = 3000; // 3 segundos
+    private final int DURACION_SPLASH = 2000; // 3 segundos
 
 
     private String server_url = "https://serverxd.herokuapp.com/api/users/validate";
@@ -32,8 +32,8 @@ public class SplashActivity extends Activity {
     public JSONObject makingJson() {
         JSONObject js = new JSONObject();
         try {
-            js.put("username", db.chatDao().getUserNameById(0));
-            js.put("password", db.chatDao().getPasswordById(0));
+            js.put("username", db.chatDao().getUserNameById(0).trim());
+            js.put("password", db.chatDao().getPasswordById(0).trim());
             js.put("status", "disponible");
         } catch (JSONException e) {
             e.printStackTrace();

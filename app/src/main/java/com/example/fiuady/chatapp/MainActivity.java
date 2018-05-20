@@ -574,8 +574,8 @@ public class MainActivity extends AppCompatActivity {
     public JSONObject makingJson() {
         JSONObject js = new JSONObject();
         try {
-            js.put("username", user_name.getText());
-            js.put("password", user_pass.getText());
+            js.put("username", user_name.getText().toString().trim());
+            js.put("password", user_pass.getText().toString().trim());
             js.put("status", "disponible");
         } catch (JSONException e) {
             e.printStackTrace();

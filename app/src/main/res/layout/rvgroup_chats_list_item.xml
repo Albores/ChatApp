@@ -19,10 +19,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:padding="5dp"
-            android:textSize="15sp"
-            android:ellipsize="end"
-            android:textStyle="bold"
             android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="Los Chidoris" />
 
         <TextView
@@ -39,11 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="right"
+            android:gravity="end"
             android:padding="5dp"
             android:singleLine="true"
-            android:textSize="10sp"
-            android:textStyle="italic"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             tools:text="20180513 at 15:20 PM" />
 
     </LinearLayout>
@@ -59,10 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:singleLine="true"
             android:padding="5dp"
-            android:textSize="15sp"
-            android:textStyle="normal"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             tools:text="Hola prro Hola prro Hola prro Hola prro Hola prro Hola prro Hola prro Hola prro " />
 
 

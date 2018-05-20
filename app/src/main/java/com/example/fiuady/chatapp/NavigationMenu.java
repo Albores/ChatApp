@@ -168,9 +168,9 @@ public class NavigationMenu extends AppCompatActivity {
 
                 return true;
             case R.id.cerrar_sesion_menu:
-                UsersTable user = new UsersTable(0, "vacío","*****");
+                UsersTable user = new UsersTable(0, "vacío", "*****");
                 db.chatDao().UpdateUser(user);
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
                 return true;
@@ -178,25 +178,26 @@ public class NavigationMenu extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-        @Override
-        protected void onActivityResult ( int requestCode, int resultCode, Intent data){
-            //super.onActivityResult(requestCode, resultCode, data);
-            switch (requestCode) {
-                case 0X01:
-                    if (resultCode == RESULT_OK) {
-                        fillChatsAdapter();
-                    }
-                    break;
-                case 0x02:
-                    if (resultCode == RESULT_OK) {
-                        //fillGroupsAdapter();
-                    }
-                    break;
-                default:
-                    //other activities
-                    break;
-            }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 0X01:
+                if (resultCode == RESULT_OK) {
+                    fillChatsAdapter();
+                }
+                break;
+            case 0x02:
+                if (resultCode == RESULT_OK) {
+                    //fillGroupsAdapter();
+                }
+                break;
+            default:
+                //other activities
+                break;
         }
+    }
 
 
 }
