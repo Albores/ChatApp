@@ -158,7 +158,7 @@ public class ChatActivity extends AppCompatActivity {
                 String msg = db.chatDao().getMessageById(i);
                 rv_group_messages_data.add(new GroupMessage(
                         i,
-                        db.chatDao().getFirstNameById(db.chatDao().getSenderIdByMessageId(i)) + " " + db.chatDao().getLastNameById(db.chatDao().getSenderIdByMessageId(i)),
+                        db.chatDao().getUserNameById(db.chatDao().getSenderIdByMessageId(i)) + " " + db.chatDao().getUserNameById(db.chatDao().getSenderIdByMessageId(i)),
                         msg,
                         db.chatDao().getSenderIdByMessageId(i),
                         db.chatDao().getDateByIdMessageGroup(i)));
@@ -178,7 +178,7 @@ public class ChatActivity extends AppCompatActivity {
                 String gp_msg2 = db.chatDao().getMessageById(i);
                 rv_group_messages_data.add(new GroupMessage(
                         i,
-                        db.chatDao().getFirstNameById(db.chatDao().getSenderIdByMessageId(i)) + " " + db.chatDao().getLastNameById(db.chatDao().getSenderIdByMessageId(i)),
+                        db.chatDao().getUserNameById(db.chatDao().getSenderIdByMessageId(i)) + " " + db.chatDao().getUserNameById(db.chatDao().getSenderIdByMessageId(i)),
                         gp_msg2,
                         db.chatDao().getSenderIdByMessageId(i),
                         db.chatDao().getDateByIdMessageGroup(i)));
@@ -208,7 +208,7 @@ public class ChatActivity extends AppCompatActivity {
         if(simpleChat){
             final String received_hided_id = intent.getStringExtra(ChatActivity.EXTRA_HIDED_ID);
             contactId = Integer.parseInt(received_hided_id);
-            tvContactName.setText(db.chatDao().getFirstNameById(contactId));
+            tvContactName.setText(db.chatDao().getUserNameById(contactId));
             fillChatAdapter();//Getting data from database and setting to AdapterChats then recyclerView
         }
         else {

@@ -75,8 +75,8 @@ public class NavigationMenu extends AppCompatActivity {
             if(db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
                 rv_chats_data.add(new Chat(
                         i,
-                        db.chatDao().getFirstNameById(i),
-                        db.chatDao().getLastNameById(i),
+                        db.chatDao().getUserNameById(i),
+                        db.chatDao().getUserNameById(i),
                         db.chatDao().getLastMessageOfContact(i, my_id),
                         db.chatDao().getLastDateOfContact(i, my_id)));
             }
@@ -124,9 +124,7 @@ public class NavigationMenu extends AppCompatActivity {
             if(i != my_id){
                 rv_users_data.add(new User(
                         i,
-                        db.chatDao().getFirstNameById(i),
-                        db.chatDao().getLastNameById(i),
-                        db.chatDao().getPhoneNumberById(i),
+                        db.chatDao().getUserNameById(i),
                         db.chatDao().getPasswordById(i)));
             }
         }

@@ -5,6 +5,8 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.android.volley.toolbox.StringRequest;
+
 import java.util.List;
 
 @Dao
@@ -14,35 +16,18 @@ public interface ChatDao {
     @Query("SELECT * FROM users")
     List<UsersTable> getUsers();
 
-    @Query("SELECT * FROM users WHERE last_name LIKE :last_name") //referencia a un parámetro con autocompletar
-    UsersTable getUserByLastName(String last_name);
-
-    @Query("SELECT * FROM users WHERE first_name LIKE :first_name") //referencia a un parámetro con autocompletar
-    UsersTable getUserByFirstName(String first_name);
-
     @Query("SELECT * FROM users WHERE id in (:ids)")
     List<UsersTable> getUserById(int[] ids);
 
-    @Query("SELECT first_name FROM users WHERE id = :id")
-    String getFirstNameById(int id);
+    @Query("select username from users where id = :id")
+    String getUserNameById(int id);
 
-    @Query("SELECT last_name FROM users WHERE id = :id")
-    String getLastNameById(int id);
-
-    @Query("SELECT phone_number FROM users WHERE id = :id")
-    String getPhoneNumberById(int id);
+    @Query("Select id from users where username =:username")
+    int getIdByUserName(String username);
 
     @Query("SELECT password FROM users WHERE id = :id")
     String getPasswordById(int id);
 
-    @Query("SELECT id FROM users WHERE first_name = :first_name")
-    int getIdByFirstName(String first_name);
-
-    @Query("SELECT id FROM users WHERE last_name + first_name = :complete_name")
-    int getIdByCompleteName(String complete_name);
-
-    @Query("SELECT id FROM users WHERE phone_number = :phone_number")
-    int getIdByPhoneNumber(String phone_number);
 
     @Query("SELECT MAX(id) FROM users")
     int getMaxIdUsers();
@@ -143,7 +128,7 @@ public interface ChatDao {
     @Query("SELECT date FROM group_messages WHERE sender_id = :sender_id ORDER BY id DESC LIMIT 1")
     String getLastDateOfSenderId(int sender_id);
 
-    @Query("SELECT first_name FROM users WHERE id = :sender_id")
+    @Query("SELECT username FROM users WHERE id = :sender_id")
     String getFirstNameByIdGroup(int sender_id);
 
     @Query("SELECT group_id FROM group_messages WHERE id = :message_id")

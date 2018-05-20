@@ -32,8 +32,8 @@ public class SplashActivity extends Activity {
     public JSONObject makingJson() {
         JSONObject js = new JSONObject();
         try {
-            js.put("username", db.chatDao().getFirstNameById(2));
-            js.put("password", db.chatDao().getPasswordById(2));
+            js.put("username", db.chatDao().getUserNameById(0));
+            js.put("password", db.chatDao().getPasswordById(0));
             js.put("status", "disponible");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -46,12 +46,9 @@ public class SplashActivity extends Activity {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, server_url, makingJson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(SplashActivity.this,  response.opt("message").toString(), Toast.LENGTH_SHORT).show();
-                if(response.opt("message").toString()=="ok"){
+                Toast.makeText(SplashActivity.this,response.optString("message"), Toast.LENGTH_SHORT).show();
+                if(response.optString("message").equals("ok")){
                     Intent intent = new Intent(SplashActivity.this, NavigationMenu.class);
-                    startActivity(intent);
-                }else{
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
 
@@ -60,6 +57,8 @@ public class SplashActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(SplashActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         }) {
             @Override

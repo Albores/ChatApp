@@ -37,25 +37,27 @@ import java.util.Random;
 
 class User {
     private int id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+    private String username;
     private String password;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public int getId() {
         return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public String getPassword() {
@@ -63,11 +65,9 @@ class User {
     }
 
 
-    public User(int id, String firstName, String lastName, String phoneNumber, String password) {
+    public User(int id, String username, String password) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+        this.username=username;
         this.password = password;
     }
 }
@@ -76,18 +76,14 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView rvFirstName;
-        private TextView rvLastName;
-        private TextView rvPhoneNumber;
+        private TextView rvusername;
         private TextView rvId;
         private User user;
         private Context context;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            rvFirstName = itemView.findViewById(R.id.first_name_text);
-            rvLastName = itemView.findViewById(R.id.last_name_text);
-            rvPhoneNumber = itemView.findViewById(R.id.phone_number_text);
+            rvusername = itemView.findViewById(R.id.username_text);
             rvId = itemView.findViewById(R.id.hided_user_id);
             context = itemView.getContext();
             itemView.setClickable(true);
@@ -101,9 +97,7 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
         public void bind(User users) {
             this.user = users;
-            rvFirstName.setText(users.getFirstName());
-            rvLastName.setText(users.getLastName());
-            rvPhoneNumber.setText(users.getPhoneNumber());
+            rvusername.setText(users.getUsername());
             rvId.setText(String.valueOf(users.getId()));
         }
 
@@ -559,7 +553,7 @@ public class MainActivity extends AppCompatActivity {
         int max_user_id = db.chatDao().getMaxIdUsers();
 
         for (int i = 0; i <= max_user_id; i++) {
-            if (log_name.equals(db.chatDao().getFirstNameById(i))) {
+            if (log_name.equals(db.chatDao().getUserNameById(i))) {
                 name_check = true;
             }
         }
@@ -621,9 +615,9 @@ public class MainActivity extends AppCompatActivity {
 
         db = ChatDatabase.getDatabase(MainActivity.this);
 
-        UsersTable uno = db.chatDao().getUserByLastName("Chan");
-        uno.setFirstName("Jose");
-        db.chatDao().UpdateUser(uno);
+//        UsersTable uno = db.chatDao().getUserByLastName("Chan");
+//        uno.setFirstName("Jose");
+//        db.chatDao().UpdateUser(uno);
 
         login_btn = findViewById(R.id.login_btn);
         register_tv = findViewById(R.id.logon_btn);
@@ -636,7 +630,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Random r = new Random();
                 int id_random = r.nextInt(db.chatDao().getMaxIdUsers() + 1);
-                user_name.setText(db.chatDao().getFirstNameById(id_random));
+                user_name.setText(db.chatDao().getUserNameById(id_random));
                 user_pass.setText(db.chatDao().getPasswordById(id_random));
             }
         });
@@ -645,11 +639,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkExistingUser()) {
-                    ActualUser.id = db.chatDao().getIdByFirstName(user_name.getText().toString());
+                    ActualUser.id = db.chatDao().getIdByUserName(user_name.getText().toString());
                     Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
 
                     //intent.putExtra(NavigationMenu.EXTRA_USER_ID, String.valueOf(db.usersDao().getIdByFirstName(user_name.getText().toString())));
                     startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(MainActivity.this, "Usuario o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
                 }
@@ -662,6 +657,8 @@ public class MainActivity extends AppCompatActivity {
         register_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               UsersTable user = new UsersTable(0,user_name.getText().toString(),user_pass.getText().toString());
+                db.chatDao().UpdateUser(user);
                 makingJson();
                 sendJsonRequest();
             }

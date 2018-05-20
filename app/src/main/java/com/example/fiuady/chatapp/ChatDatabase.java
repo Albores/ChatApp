@@ -25,19 +25,14 @@ public abstract class ChatDatabase extends RoomDatabase {
         if (Instance == null) {
             synchronized (ChatDatabase.class) {
                 if (Instance == null) {
-                    Instance = Room.databaseBuilder(context, ChatDatabase.class, "whatchats").
+                    Instance = Room.databaseBuilder(context, ChatDatabase.class, "ChatDatabase").
                             allowMainThreadQueries().addCallback(new RoomDatabase.Callback() {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
                             //Valores iniciales de la DB
                             //Chats usuarios
-                            db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (0, 'Sara', 'Torres', '9991234567', '1234')");
-                            db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (1, 'Gerardo', 'Canul', '9992764598', '1234')");
-                            db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (2, 'Jorge', 'Albores', '9992468649', '1234')");
-                            db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (3, 'Eduardo', 'Chan', '9991895311', '1234')");
-                            db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (4, 'Marisol', 'Puerto', '9991362718', '1234')");
-                            db.execSQL("INSERT INTO users(id, first_name, last_name, phone_number, password) VALUES (5, 'Saul', 'Algo', '9993598437', '1234')");
+                            db.execSQL("INSERT INTO users(id, username, password) VALUES (0, 'Albores', '1234')");
 
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (0, 'Jose a Sara', 3, 0, '20180514 at 00:25 AM')");
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (1, 'Marisol a Jose', 4, 3, '20180514 at 00:28 AM')");

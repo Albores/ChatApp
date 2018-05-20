@@ -10,47 +10,35 @@ public class UsersTable {
     @ColumnInfo (name = "id")
     private int id;
 
-    @ColumnInfo (name = "first_name")
+    @ColumnInfo (name = "username")
     @NonNull
-    private String firstName;
-
-    @ColumnInfo (name = "last_name")
-    @NonNull
-    private String lastName;
-
-    @ColumnInfo (name = "phone_number")
-    @NonNull
-    private String phoneNumber;
+    private String username;
 
     @ColumnInfo (name = "password")
     @NonNull
     private String password;
 
-    public UsersTable(int id, @NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @NonNull String password) {
+    public UsersTable(int id, @NonNull String username, @NonNull String password) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+        this.username = username;
         this.password = password;
     }
 
-    //Getter
     public int getId() {
         return id;
     }
 
-    @NonNull
-    public String getFirstName() {
-        return firstName;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @NonNull
-    public String getLastName() {
-        return lastName;
+    public String getUsername() {
+        return username;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public void setUsername(@NonNull String username) {
+        this.username = username;
     }
 
     @NonNull
@@ -58,25 +46,7 @@ public class UsersTable {
         return password;
     }
 
-
-    //Setter
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setFirstName(@NonNull String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(@NonNull String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setPhoneNumber(@NonNull String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public void setPassword(@NonNull String password) {
-        this.firstName = password;
+        this.password = password;
     }
 }
