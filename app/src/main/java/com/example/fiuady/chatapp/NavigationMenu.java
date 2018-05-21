@@ -168,11 +168,14 @@ public class NavigationMenu extends AppCompatActivity {
 
                 return true;
             case R.id.cerrar_sesion_menu:
-                UsersTable user = new UsersTable(0, "vacío", "*****","Disponible","default");
+                UsersTable user = new UsersTable(0, "vacío", "*****", "Disponible", "default");
                 db.chatDao().UpdateUser(user);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
+                return true;
+            case R.id.perfil_menu:
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

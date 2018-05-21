@@ -550,6 +550,7 @@ public class MainActivity extends AppCompatActivity {
     private int originPort;
     private int destinyId;
     private GridView gridView;
+    private String avatar;
 
     public class ImageAdapter extends BaseAdapter {
 
@@ -651,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
             js.put("username", user_name.getText().toString().trim());
             js.put("password", user_pass.getText().toString().trim());
             js.put("status", "Disponible");
-            js.put("avatar", "default");
+            js.put("avatar", avatar);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -730,28 +731,35 @@ public class MainActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
+
                 switch (position) {
                     case 0:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_0";
                         break;
                     case 1:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_1";
                         break;
                     case 2:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_2";
                         break;
                     case 3:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_3";
                         break;
                     case 4:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_4";
                         break;
                     case 5:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_5";
                         break;
                     case 6:
                         view.setBackgroundColor(Color.BLUE);
+                        avatar="avatar_6";
                         break;
                 }
 
@@ -782,7 +790,7 @@ public class MainActivity extends AppCompatActivity {
         register_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), "Disponible", "default");
+                UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), "Disponible", avatar);
                 db.chatDao().UpdateUser(user);
                 makingJson();
                 sendJsonUserRequest(URL_Usuarios);
