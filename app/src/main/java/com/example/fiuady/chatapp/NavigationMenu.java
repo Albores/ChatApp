@@ -38,6 +38,7 @@ public class NavigationMenu extends AppCompatActivity {
     private UsersAdapter usersAdapter;
     private ChatsAdapter chatsAdapter;
     private GroupsAdapter groupsAdapter;
+    private TextView tvuserperfil;
 
     private int my_id = ActualUser.id;
     private int total_users;
@@ -148,7 +149,8 @@ public class NavigationMenu extends AppCompatActivity {
 
         recyclerContainer = findViewById(R.id.recycler_view_container);
         recyclerContainer.setLayoutManager(new LinearLayoutManager(this));
-
+        tvuserperfil = findViewById(R.id.user_perfil);
+        tvuserperfil.setText(db.chatDao().getUserNameById(0));
         fillChatsAdapter(); //Starts activity with chatsAdapter
 
 
