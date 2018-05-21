@@ -32,7 +32,7 @@ public abstract class ChatDatabase extends RoomDatabase {
                             super.onCreate(db);
                             //Valores iniciales de la DB
                             //Chats usuarios
-                            db.execSQL("INSERT INTO users(id, username, password) VALUES (0, 'Albores', '1234')");
+                            db.execSQL("INSERT INTO users(id, username, password, status, avatar) VALUES (0, 'Albores', '1234','Disponible','cosa_chida')");
 
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (0, 'Jose a Sara', 3, 0, '20180514 at 00:25 AM')");
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (1, 'Marisol a Jose', 4, 3, '20180514 at 00:28 AM')");

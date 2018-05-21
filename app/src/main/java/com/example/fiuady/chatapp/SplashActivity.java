@@ -34,7 +34,8 @@ public class SplashActivity extends Activity {
         try {
             js.put("username", db.chatDao().getUserNameById(0).trim());
             js.put("password", db.chatDao().getPasswordById(0).trim());
-            js.put("status", "disponible");
+            js.put("status", "Disponible");
+            js.put("avatar","default");
         } catch (JSONException e) {
             e.printStackTrace();
         }

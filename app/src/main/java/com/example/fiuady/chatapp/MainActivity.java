@@ -3,6 +3,7 @@ package com.example.fiuady.chatapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -12,9 +13,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -543,6 +549,74 @@ public class MainActivity extends AppCompatActivity {
     private int destinyPort;
     private int originPort;
     private int destinyId;
+    private GridView gridView;
+
+    public class ImageAdapter extends BaseAdapter {
+
+        private Context mContext;
+        public ImageView imageView;
+
+        public ImageView getImageView() {
+            return imageView;
+        }
+
+        // Keep all Images in array
+        public Integer[] mThumbIds = {
+                R.drawable.avatar_1, R.drawable.avatar_2,
+                R.drawable.avatar_3, R.drawable.avatar_4,
+                R.drawable.avatar_5, R.drawable.avatar_6
+
+        };
+
+        // Constructor
+        public ImageAdapter(Context c) {
+            mContext = c;
+        }
+
+        public Context getMContext() {
+            return mContext;
+        }
+
+        @Override
+        public int getCount() {
+            return mThumbIds.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mThumbIds[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+            /*
+            Crear un nuevo Image View de 90x90
+            y con recorte alrededor del centro
+             */
+                imageView = new ImageView(mContext);
+                imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+
+            //Setear la imagen desde el recurso drawable
+            imageView.setImageResource(mThumbIds[position]);
+            return imageView;
+        }
+//            imageView = new ImageView(mContext);
+//            imageView.setImageResource(R.drawable.avatar_2);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            imageView.setLayoutParams(new GridView.LayoutParams(70, 70));
+//            return imageView;
+    }
 
     private boolean checkExistingUser() {
         boolean la = false;
@@ -576,7 +650,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             js.put("username", user_name.getText().toString().trim());
             js.put("password", user_pass.getText().toString().trim());
-            js.put("status", "disponible");
+            js.put("status", "Disponible");
+            js.put("avatar", "default");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -613,8 +688,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
-                if(response.optString("message").equals("ok")){
-                    UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString());
+                if (response.optString("message").equals("ok")) {
+                    UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), response.optString("status"), response.optString("avatar"));
                     db.chatDao().UpdateUser(user);
                     Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
                     startActivity(intent);
@@ -647,26 +722,46 @@ public class MainActivity extends AppCompatActivity {
         Stetho.initializeWithDefaults(this);
 
         db = ChatDatabase.getDatabase(MainActivity.this);
-
+        gridView = (GridView) findViewById(R.id.gridview);
 //        UsersTable uno = db.chatDao().getUserByLastName("Chan");
 //        uno.setFirstName("Jose");
 //        db.chatDao().UpdateUser(uno);
+        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                
+                switch (position) {
+                    case 0:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                    case 1:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                    case 2:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                    case 3:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                    case 4:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                    case 5:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                    case 6:
+                        view.setBackgroundColor(Color.BLUE);
+                        break;
+                }
 
+            }
+        });
         login_btn = findViewById(R.id.login_btn);
         register_tv = findViewById(R.id.logon_btn);
         user_name = findViewById(R.id.name_txt);
         user_pass = findViewById(R.id.pass_txt);
-        random_user = findViewById(R.id.random_btn);
 
-        random_user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Random r = new Random();
-                int id_random = r.nextInt(db.chatDao().getMaxIdUsers() + 1);
-                user_name.setText(db.chatDao().getUserNameById(id_random));
-                user_pass.setText(db.chatDao().getPasswordById(id_random));
-            }
-        });
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -687,7 +782,7 @@ public class MainActivity extends AppCompatActivity {
         register_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString());
+                UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), "Disponible", "default");
                 db.chatDao().UpdateUser(user);
                 makingJson();
                 sendJsonUserRequest(URL_Usuarios);

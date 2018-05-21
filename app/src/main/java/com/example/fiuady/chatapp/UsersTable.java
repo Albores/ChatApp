@@ -18,14 +18,42 @@ public class UsersTable {
     @NonNull
     private String password;
 
-    public UsersTable(int id, @NonNull String username, @NonNull String password) {
+    @ColumnInfo (name = "status")
+    @NonNull
+    private String status;
+
+    @ColumnInfo (name = "avatar")
+    @NonNull
+    private String avatar;
+
+    public UsersTable(int id, @NonNull String username, @NonNull String password, @NonNull String status, @NonNull String avatar) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.status = status;
+        this.avatar = avatar;
     }
 
     public int getId() {
         return id;
+    }
+
+    @NonNull
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NonNull String status) {
+        this.status = status;
+    }
+
+    @NonNull
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(@NonNull String avatar) {
+        this.avatar = avatar;
     }
 
     public void setId(int id) {
