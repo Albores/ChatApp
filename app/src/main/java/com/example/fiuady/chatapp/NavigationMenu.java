@@ -9,6 +9,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.RoomOpenHelper;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
@@ -39,6 +41,8 @@ public class NavigationMenu extends AppCompatActivity {
     private ChatsAdapter chatsAdapter;
     private GroupsAdapter groupsAdapter;
     private TextView tvuserperfil;
+    private String avatar;
+    private ImageView avatarToolBar;
 
     private int my_id = ActualUser.id;
     private int total_users;
@@ -150,7 +154,29 @@ public class NavigationMenu extends AppCompatActivity {
         recyclerContainer = findViewById(R.id.recycler_view_container);
         recyclerContainer.setLayoutManager(new LinearLayoutManager(this));
         tvuserperfil = findViewById(R.id.user_perfil);
+        avatarToolBar = findViewById(R.id.app_bar_image);
         tvuserperfil.setText(db.chatDao().getUserNameById(0));
+        avatar = db.chatDao().getAvatarUser(0);
+        switch (avatar) {
+            case "avatar_0":
+                avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_1));
+                break;
+            case "avatar_1":
+                avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_2));
+                break;
+            case "avatar_2":
+                avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_3));
+                break;
+            case "avatar_3":
+                avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_4));
+                break;
+            case "avatar_4":
+                avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_5));
+                break;
+            case "avatar_5":
+                avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_6));
+                break;
+        }
         fillChatsAdapter(); //Starts activity with chatsAdapter
 
 

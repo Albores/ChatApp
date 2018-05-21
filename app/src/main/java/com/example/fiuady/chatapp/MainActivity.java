@@ -757,10 +757,6 @@ public class MainActivity extends AppCompatActivity {
                         view.setBackgroundColor(Color.BLUE);
                         avatar="avatar_5";
                         break;
-                    case 6:
-                        view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_6";
-                        break;
                 }
 
             }
