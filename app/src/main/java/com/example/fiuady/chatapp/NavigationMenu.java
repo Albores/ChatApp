@@ -1,5 +1,7 @@
 package com.example.fiuady.chatapp;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.arch.persistence.room.DatabaseConfiguration;
@@ -8,6 +10,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.RoomOpenHelper;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,13 +19,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
@@ -43,6 +49,7 @@ public class NavigationMenu extends AppCompatActivity {
     private TextView tvuserperfil;
     private String avatar;
     private ImageView avatarToolBar;
+    private TextView actualusername;
 
     private int my_id = ActualUser.id;
     private int total_users;
@@ -157,6 +164,7 @@ public class NavigationMenu extends AppCompatActivity {
         avatarToolBar = findViewById(R.id.app_bar_image);
         tvuserperfil.setText(db.chatDao().getUserNameById(0));
         avatar = db.chatDao().getAvatarUser(0);
+
         switch (avatar) {
             case "avatar_0":
                 avatarToolBar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_1));
@@ -189,21 +197,50 @@ public class NavigationMenu extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.opciones_menu:
-
+            case R.id.usuario_menu:
+                //Toast.makeText(this, "cambiar usuario", Toast.LENGTH_SHORT).show();
+                //actualusername=findViewById(R.id.actualusername_tv);
+                //actualusername.setText(db.chatDao().getUserNameById(0));
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                LayoutInflater inflater = this.getLayoutInflater();
+                builder.setView(inflater.inflate(R.layout.cambiar_usuario, null));
+                builder.setTitle("CAMBIAR USUARIO ACTUAL")
+                        .setMessage("Por favor Llene la información requerida.")
+                        .setIcon(avatarToolBar.getDrawable());
+                builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(NavigationMenu.this, "Usuario Actualizado Corectamente", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(NavigationMenu.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setCancelable(false);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
+            case R.id.contraseña_menu:
+                Toast.makeText(this, "cambiar contra", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.estado_menu:
+                Toast.makeText(this, "cambiar estado", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.avatar_menu:
+                Toast.makeText(this, "cambiar avatar", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.cerrar_sesion_menu:
-                UsersTable user = new UsersTable(0, "vacío", "*****", "Disponible", "default");
+                UsersTable user = new UsersTable(0, "vacío", "*****", "Disponible", "avatar_0");
                 db.chatDao().UpdateUser(user);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
-                return true;
-            case R.id.perfil_menu:
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

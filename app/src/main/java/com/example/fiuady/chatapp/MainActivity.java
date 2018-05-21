@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -692,6 +693,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.optString("message").equals("ok")) {
                     UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), response.optString("status"), response.optString("avatar"));
                     db.chatDao().UpdateUser(user);
+
                     Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
                     startActivity(intent);
                     finish();
@@ -715,13 +717,40 @@ public class MainActivity extends AppCompatActivity {
         queue.add(jsonRequest);
     }
 
+    public void receiveJsonUserRequest(String URL) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(MainActivity.this, "Response "+response, Toast.LENGTH_SHORT).show();
+//                if (response.optString("message").equals("ok")) {
+//                    UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
+//                    db.chatDao().UpdateUser(user);
+//                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(jsonRequest);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Stetho.initializeWithDefaults(this);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         db = ChatDatabase.getDatabase(MainActivity.this);
         gridView = (GridView) findViewById(R.id.gridview);
 //        UsersTable uno = db.chatDao().getUserByLastName("Chan");
@@ -735,27 +764,27 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_0";
+                        avatar = "avatar_0";
                         break;
                     case 1:
                         view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_1";
+                        avatar = "avatar_1";
                         break;
                     case 2:
                         view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_2";
+                        avatar = "avatar_2";
                         break;
                     case 3:
                         view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_3";
+                        avatar = "avatar_3";
                         break;
                     case 4:
                         view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_4";
+                        avatar = "avatar_4";
                         break;
                     case 5:
                         view.setBackgroundColor(Color.BLUE);
-                        avatar="avatar_5";
+                        avatar = "avatar_5";
                         break;
                 }
 
@@ -771,6 +800,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                receiveJsonUserRequest(URL_Usuarios);
                 sendJsonUserValidateRequest(URL_Validacion_Usuarios);
 
 //                if (checkExistingUser()) {

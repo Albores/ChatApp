@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="Perfil"
-        android:id="@+id/perfil_menu"
+    <item android:title="Cambiar Usuario"
+        android:id="@+id/usuario_menu"
         app:showAsAction="never"/>
-
-    <item android:title="Opciones"
-        android:id="@+id/opciones_menu"
+    <item android:title="Cambiar Contraseña"
+        android:id="@+id/contraseña_menu"
         app:showAsAction="never"/>
-
+    <item android:title="Cambiar Estado"
+        android:id="@+id/estado_menu"
+        app:showAsAction="never"/>
+    <item android:title="Cambiar Avatar"
+        android:id="@+id/avatar_menu"
+        app:showAsAction="never"/>
     <item android:title="Cerrar sesión"
         android:id="@+id/cerrar_sesion_menu"
         app:showAsAction="never"/>
