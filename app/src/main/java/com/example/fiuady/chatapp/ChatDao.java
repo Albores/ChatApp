@@ -31,6 +31,9 @@ public interface ChatDao {
     @Query("SELECT avatar FROM users WHERE id = :id")
     String getAvatarUser(int id);
 
+    @Query("SELECT status FROM users WHERE id = :id")
+    String getStatusUser(int id);
+
     @Query("SELECT MAX(id) FROM users")
     int getMaxIdUsers();
 

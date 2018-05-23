@@ -1,18 +1,10 @@
 package com.example.fiuady.chatapp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
-import android.arch.persistence.room.DatabaseConfiguration;
-import android.arch.persistence.room.InvalidationTracker;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.RoomOpenHelper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,16 +16,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -58,6 +51,73 @@ public class NavigationMenu extends AppCompatActivity {
     private List<Chat> rv_chats_data = new ArrayList<>();
     private List<Group> rv_groups_data = new ArrayList<>();
     private List<User> rv_users_data = new ArrayList<>();
+
+    public class ImageAdapter extends BaseAdapter {
+
+        private Context mContext;
+        public ImageView imageView;
+
+        public ImageView getImageView() {
+            return imageView;
+        }
+
+        // Keep all Images in array
+        public Integer[] mThumbIds = {
+                R.drawable.avatar_1, R.drawable.avatar_2,
+                R.drawable.avatar_3, R.drawable.avatar_4,
+                R.drawable.avatar_5, R.drawable.avatar_6
+
+        };
+
+        // Constructor
+        public ImageAdapter(Context c) {
+            mContext = c;
+        }
+
+        public Context getMContext() {
+            return mContext;
+        }
+
+        @Override
+        public int getCount() {
+            return mThumbIds.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mThumbIds[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+            /*
+            Crear un nuevo Image View de 90x90
+            y con recorte alrededor del centro
+             */
+                imageView = new ImageView(mContext);
+                imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+
+            //Setear la imagen desde el recurso drawable
+            imageView.setImageResource(mThumbIds[position]);
+            return imageView;
+        }
+//            imageView = new ImageView(mContext);
+//            imageView.setImageResource(R.drawable.avatar_2);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            imageView.setLayoutParams(new GridView.LayoutParams(70, 70));
+//            return imageView;
+    }
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -207,7 +267,10 @@ public class NavigationMenu extends AppCompatActivity {
                 //actualusername.setText(db.chatDao().getUserNameById(0));
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 LayoutInflater inflater = this.getLayoutInflater();
-                builder.setView(inflater.inflate(R.layout.cambiar_usuario, null));
+                View dialogView = inflater.inflate(R.layout.cambiar_usuario, null);
+                builder.setView(dialogView);
+                actualusername=dialogView.findViewById(R.id.actualusername_tv);
+                actualusername.setText(db.chatDao().getUserNameById(0));
                 builder.setTitle("CAMBIAR USUARIO ACTUAL")
                         .setMessage("Por favor Llene la información requerida.")
                         .setIcon(avatarToolBar.getDrawable());
@@ -227,13 +290,111 @@ public class NavigationMenu extends AppCompatActivity {
                 dialog.show();
                 return true;
             case R.id.contraseña_menu:
-                Toast.makeText(this, "cambiar contra", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "cambiar contra", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                LayoutInflater inflater1 = this.getLayoutInflater();
+                View dialogView1 = inflater1.inflate(R.layout.cambiar_contrasena, null);
+                builder1.setView(dialogView1);
+                builder1.setTitle("CAMBIAR CONTRASEÑA ACTUAL")
+                        .setMessage("Por favor Llene la información requerida.")
+                        .setIcon(avatarToolBar.getDrawable());
+                builder1.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(NavigationMenu.this, "Usuario Actualizado Corectamente", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(NavigationMenu.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder1.setCancelable(false);
+                AlertDialog dialog1 = builder1.create();
+                dialog1.show();
                 return true;
             case R.id.estado_menu:
-                Toast.makeText(this, "cambiar estado", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "cambiar estado", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+                LayoutInflater inflater2 = this.getLayoutInflater();
+                View dialogView2 = inflater2.inflate(R.layout.cambiar_estado, null);
+                builder2.setView(dialogView2);
+                builder2.setTitle("CAMBIAR ESTADO ACTUAL")
+                        .setMessage("Por favor Llene la información requerida.")
+                        .setIcon(avatarToolBar.getDrawable());
+                builder2.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(NavigationMenu.this, "Usuario Actualizado Corectamente", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(NavigationMenu.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder2.setCancelable(false);
+                AlertDialog dialog2 = builder2.create();
+                dialog2.show();
                 return true;
             case R.id.avatar_menu:
-                Toast.makeText(this, "cambiar avatar", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "cambiar avatar", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(this);
+                LayoutInflater inflater3 = this.getLayoutInflater();
+                View dialogView3 = inflater3.inflate(R.layout.cambiar_avatar, null);
+                builder3.setView(dialogView3);
+                final GridView gridView = (GridView) dialogView3.findViewById(R.id.gridview);
+                gridView.setAdapter(new NavigationMenu.ImageAdapter(this));
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        switch (position) {
+                            case 0:
+                                view.setBackgroundColor(Color.BLUE);
+                                avatar = "avatar_0";
+                                break;
+                            case 1:
+                                view.setBackgroundColor(Color.BLUE);
+                                avatar = "avatar_1";
+                                break;
+                            case 2:
+                                view.setBackgroundColor(Color.BLUE);
+                                avatar = "avatar_2";
+                                break;
+                            case 3:
+                                view.setBackgroundColor(Color.BLUE);
+                                avatar = "avatar_3";
+                                break;
+                            case 4:
+                                view.setBackgroundColor(Color.BLUE);
+                                avatar = "avatar_4";
+                                break;
+                            case 5:
+                                view.setBackgroundColor(Color.BLUE);
+                                avatar = "avatar_5";
+                                break;
+                        }
+
+                    }
+                });
+                builder3.setTitle("CAMBIAR AVATAR ACTUAL")
+                        .setMessage("Por favor Llene la información requerida.")
+                        .setIcon(avatarToolBar.getDrawable());
+                builder3.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(NavigationMenu.this, "Usuario Actualizado Corectamente", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder3.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(NavigationMenu.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder3.setCancelable(false);
+                AlertDialog dialog3 = builder3.create();
+                dialog3.show();
                 return true;
             case R.id.cerrar_sesion_menu:
                 UsersTable user = new UsersTable(0, "vacío", "*****", "Disponible", "avatar_0");

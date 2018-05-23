@@ -552,6 +552,7 @@ public class MainActivity extends AppCompatActivity {
     private int destinyId;
     private GridView gridView;
     private String avatar;
+    private int id_server_usuario;
 
     public class ImageAdapter extends BaseAdapter {
 
@@ -645,6 +646,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String URL_Usuarios = "https://serverxd.herokuapp.com/api/users";
+    private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/50";
     private String URL_Validacion_Usuarios = "https://serverxd.herokuapp.com/api/users/validate";
 
     public JSONObject makingJson() {
@@ -666,6 +668,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+                id_server_usuario=response.optInt("id");
+                UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
+                db.chatDao().UpdateUser(user);
 
             }
         }, new Response.ErrorListener() {
@@ -691,12 +696,11 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
                 if (response.optString("message").equals("ok")) {
-                    UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), response.optString("status"), response.optString("avatar"));
-                    db.chatDao().UpdateUser(user);
+                    //UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), db.chatDao().getStatusUser(0), db.chatDao().getAvatarUser(0));
+                    //UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), db.chatDao().getStatusUser(0), db.chatDao().getAvatarUser(0));
+                   // db.chatDao().UpdateUser(user);
+                    receiveJsonUserRequest(URL_Usuarios_id);
 
-                    Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
-                    startActivity(intent);
-                    finish();
                 }
 
 
@@ -723,10 +727,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response "+response, Toast.LENGTH_SHORT).show();
-//                if (response.optString("message").equals("ok")) {
-//                    UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
-//                    db.chatDao().UpdateUser(user);
-//                }
+                    UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
+                    db.chatDao().UpdateUser(user);
+                Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
+                startActivity(intent);
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -800,8 +805,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                receiveJsonUserRequest(URL_Usuarios);
                 sendJsonUserValidateRequest(URL_Validacion_Usuarios);
+                //receiveJsonUserRequest(URL_Usuarios,id_server_usuario);
 
 //                if (checkExistingUser()) {
 //                    ActualUser.id = db.chatDao().getIdByUserName(user_name.getText().toString());
