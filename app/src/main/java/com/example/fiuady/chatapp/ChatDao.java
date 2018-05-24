@@ -59,7 +59,6 @@ public interface ChatDao {
     void UpdateUser(UsersTable user);
 
     //Contacts
-    //Users
     @Query("SELECT * FROM contacts")
     List<ContactTable> getContacts();
 
@@ -90,6 +89,8 @@ public interface ChatDao {
     @Insert
     void InsertContact(ContactTable contact);
 
+    @Query("DELETE FROM contacts WHERE id =:id;")
+    void deleteContacts(int id);
 
     //Groups
     @Query("SELECT name FROM groups WHERE id = :id")

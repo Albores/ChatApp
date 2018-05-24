@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +18,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.stetho.Stetho;
@@ -41,7 +40,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 class Contact {
     private int id;
@@ -105,7 +103,7 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
         private TextView rvusernamecontact;
         private TextView rvidcontact;
-        private ImageView rvavatarcontact;
+        private TextView rvavatarcontact;
         private TextView rvstatuscontact;
         private Contact contact;
         private Context context;
@@ -131,6 +129,7 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
             rvusernamecontact.setText(contact.getUsername());
             rvidcontact.setText(String.valueOf(contact.getId()));
             rvstatuscontact.setText(contact.getStatus());
+            rvavatarcontact.setText(contact.getAvatar());
         }
 
     }
@@ -577,7 +576,8 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private String avatar;
     private int id_server_usuario;
-    private int previousSelectedPosition=0;
+    private int previousSelectedPosition = 0;
+    private List<Contact> contactsList;
 
     public class ImageAdapter extends BaseAdapter {
 
@@ -671,6 +671,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String URL_Usuarios = "https://serverxd.herokuapp.com/api/users";
+    private String URL_Usuarios_username = "https://serverxd.herokuapp.com/api/usernames";
     private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/50";
     private String URL_Validacion_Usuarios = "https://serverxd.herokuapp.com/api/users/validate";
 
@@ -687,28 +688,91 @@ public class MainActivity extends AppCompatActivity {
         return js;
     }
 
-    public void receiveAllUsersRequest(String URL){
+    //    public void receiveAllUsersRequest(String URL) {
+//
+//        RequestQueue rq = Volley.newRequestQueue(this);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    JSONArray sts = null;
+//                    sts = jsonObject.getJSONArray("category");
+//
+//                    for (int i = 0; i < sts.length(); i++) {
+//                        JSONObject jo = sts.getJSONObject(i);
+//                        Category cc = new Category();
+//                        cc.setId(jo.getInt("id"));
+//                        cc.setName(jo.getString("name"));
+//                        ar.add(cc);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(MainActivity.this, "Error " + error.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        return ar;
+//    }
 
-        RequestQueue rq = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
 
-                   for (int i = 0; i < response.length(); i++) {
+    public void getAllUsersRequest(String URL) {
 
-                       ContactTable contacts = new ContactTable(i,response.optString("username"),response.optString("password"),
-                               response.optString("status"),response.optString("avatar"));
-                       Toast.makeText(MainActivity.this, "Response"+contacts, Toast.LENGTH_SHORT).show();
-                   }
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        // Initialize a new JsonArrayRequest instance
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Do something with response
+                        //mTextView.setText(response.toString());
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this,"Error " + error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        rq.add(jsonObjectRequest);
+                        // Process the JSON
+                        try {
+                            // Loop through the array elements
+                            for (int i = 0; i < response.length(); i++) {
+                                // Get current json object
+                                JSONObject contacto = response.getJSONObject(i);
+                                // Get the current student (json object) data
+//                                Contact contact = new Contact(
+//                                        contacto.optInt("id"),
+//                                        contacto.optString("username"),
+//                                        contacto.optString("password"),
+//                                        contacto.optString("status"),
+//                                        contacto.optString("avatar")
+//                                );
+                                ContactTable contact = new ContactTable(contacto.optInt("id"),
+                                        contacto.optString("username"),
+                                        contacto.optString("password"),
+                                        contacto.optString("status"),
+                                        contacto.optString("avatar"));
+                                db.chatDao().InsertContact(contact);
+                                // Toast.makeText(MainActivity.this, "contactLista:"+contact, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Do something when error occurred
+                        Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+        );
+        queue.add(jsonArrayRequest);
     }
 
     public void sendJsonUserRequest(String URL) {
@@ -717,7 +781,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
-                id_server_usuario=response.optInt("id");
+                id_server_usuario = response.optInt("id");
                 UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
                 db.chatDao().UpdateUser(user);
 
@@ -743,11 +807,12 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, URL, makingJson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+
                 if (response.optString("message").equals("ok")) {
                     //UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), db.chatDao().getStatusUser(0), db.chatDao().getAvatarUser(0));
                     //UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), db.chatDao().getStatusUser(0), db.chatDao().getAvatarUser(0));
-                   // db.chatDao().UpdateUser(user);
+                    // db.chatDao().UpdateUser(user);
+                    Toast.makeText(MainActivity.this, "Response"+response.optString("id"), Toast.LENGTH_SHORT).show();
                     receiveJsonUserRequest(URL_Usuarios_id);
 
                 }
@@ -775,9 +840,9 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(MainActivity.this, "Response "+response, Toast.LENGTH_SHORT).show();
-                    UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
-                    db.chatDao().UpdateUser(user);
+                Toast.makeText(MainActivity.this, "Response " + response, Toast.LENGTH_SHORT).show();
+                UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
+                db.chatDao().UpdateUser(user);
                 Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
                 startActivity(intent);
                 finish();
@@ -814,6 +879,7 @@ public class MainActivity extends AppCompatActivity {
 //        UsersTable uno = db.chatDao().getUserByLastName("Chan");
 //        uno.setFirstName("Jose");
 //        db.chatDao().UpdateUser(uno);
+        ActualUser.id = id_server_usuario;
         gridView.setAdapter(new ImageAdapter(this));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -863,8 +929,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-receiveAllUsersRequest(URL_Usuarios);
+        for (int i = 0; i < db.chatDao().getMaxIdContacts() + 1; i++) {
+            db.chatDao().deleteContacts(i);
+        }
+        getAllUsersRequest(URL_Usuarios);
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -64,6 +64,7 @@ public class NavigationMenu extends AppCompatActivity {
     private Boolean fabExpanded = false;
 
     private int my_id = ActualUser.id;
+    private int total_contacts;
     private int total_users;
     private int total_groups;
 
@@ -211,10 +212,10 @@ public class NavigationMenu extends AppCompatActivity {
 
     void fillContactsAdapter() {
         //I'm using Users adapter and class to fill the information since I've not created the Contacts table
-        total_users = db.chatDao().getMaxIdUsers() + 1;
+        total_contacts = db.chatDao().getMaxIdContacts() + 1;
         rv_contact_data.clear();
-        for (int i = 0; i < total_users; i++) {
-            if (i != my_id) {
+        for (int i = 0; i < total_contacts; i++) {
+            if (i != 50) {//id user
                 rv_contact_data.add(new Contact(
                         i,
                         db.chatDao().getUserNameContactById(i),

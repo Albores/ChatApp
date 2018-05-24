@@ -8,7 +8,7 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
@@ -21,11 +21,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <ImageView
+        <Button
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorSeparateBar"/>
+        <TextView
             android:id="@+id/avatarcontact_iv"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:hint="avata_0"/>
 
         <TextView
             android:id="@+id/hided_user_id"
@@ -48,12 +52,16 @@
         <TextView
             android:id="@+id/statuscontact_text"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
             android:textSize="15sp"
             android:textStyle="bold"
             tools:text="Disponible" />
+        <Button
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorSeparateBar"/>
 
     </LinearLayout>
 
