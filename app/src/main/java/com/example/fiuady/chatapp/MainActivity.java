@@ -34,6 +34,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.stetho.Stetho;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,10 +43,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-class User {
+class Contact {
     private int id;
     private String username;
     private String password;
+    private String status;
+    private String avatar;
+
+    public Contact(int id, String username, String password, String status, String avatar) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.avatar = avatar;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -59,27 +74,32 @@ class User {
         this.username = username;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public String getPassword() {
         return password;
     }
 
-
-    public User(int id, String username, String password) {
-        this.id = id;
-        this.username = username;
+    public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
 
-class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
+class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -87,7 +107,7 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
         private TextView rvidcontact;
         private ImageView rvavatarcontact;
         private TextView rvstatuscontact;
-        private User user;
+        private Contact contact;
         private Context context;
 
         public ViewHolder(View itemView) {
@@ -106,20 +126,21 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
             //nothing
         }
 
-        public void bind(User users) {
-            this.user = users;
-            rvusernamecontact.setText(users.getUsername());
-            rvidcontact.setText(String.valueOf(users.getId()));
+        public void bind(Contact contact) {
+            this.contact = contact;
+            rvusernamecontact.setText(contact.getUsername());
+            rvidcontact.setText(String.valueOf(contact.getId()));
+            rvstatuscontact.setText(contact.getStatus());
         }
 
     }
 
-    private List<User> users;
+    private List<Contact> contacts;
 
 
-    public UsersAdapter(List<User> users) {
+    public ContactAdapter(List<Contact> contacts) {
         super();
-        this.users = users;
+        this.contacts = contacts;
     }
 
     @NonNull
@@ -131,12 +152,12 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(users.get(position));
+        holder.bind(contacts.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return contacts.size();
     }
 }
 
@@ -666,6 +687,30 @@ public class MainActivity extends AppCompatActivity {
         return js;
     }
 
+    public void receiveAllUsersRequest(String URL){
+
+        RequestQueue rq = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                   for (int i = 0; i < response.length(); i++) {
+
+                       ContactTable contacts = new ContactTable(i,response.optString("username"),response.optString("password"),
+                               response.optString("status"),response.optString("avatar"));
+                       Toast.makeText(MainActivity.this, "Response"+contacts, Toast.LENGTH_SHORT).show();
+                   }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this,"Error " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        rq.add(jsonObjectRequest);
+    }
+
     public void sendJsonUserRequest(String URL) {
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, URL, makingJson(), new Response.Listener<JSONObject>() {
@@ -762,6 +807,10 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         db = ChatDatabase.getDatabase(MainActivity.this);
         gridView = (GridView) findViewById(R.id.gridview);
+        login_btn = findViewById(R.id.login_btn);
+        register_tv = findViewById(R.id.logon_btn);
+        user_name = findViewById(R.id.name_txt);
+        user_pass = findViewById(R.id.pass_txt);
 //        UsersTable uno = db.chatDao().getUserByLastName("Chan");
 //        uno.setFirstName("Jose");
 //        db.chatDao().UpdateUser(uno);
@@ -814,11 +863,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        login_btn = findViewById(R.id.login_btn);
-        register_tv = findViewById(R.id.logon_btn);
-        user_name = findViewById(R.id.name_txt);
-        user_pass = findViewById(R.id.pass_txt);
 
+receiveAllUsersRequest(URL_Usuarios);
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override

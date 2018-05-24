@@ -58,6 +58,39 @@ public interface ChatDao {
     @Update
     void UpdateUser(UsersTable user);
 
+    //Contacts
+    //Users
+    @Query("SELECT * FROM contacts")
+    List<ContactTable> getContacts();
+
+    @Query("SELECT * FROM contacts WHERE id in (:ids)")
+    List<ContactTable> getContactById(int[] ids);
+
+    @Query("select username from contacts where id = :id")
+    String getUserNameContactById(int id);
+
+    @Query("Select id from contacts where username =:username")
+    int getIdByUserNameContact(String username);
+
+    @Query("Select id from users where id = :id")
+    int getContactId(int id);
+
+    @Query("SELECT password FROM contacts WHERE id = :id")
+    String getPasswordContactById(int id);
+
+    @Query("SELECT avatar FROM contacts WHERE id = :id")
+    String getAvatarContact(int id);
+
+    @Query("SELECT status FROM contacts WHERE id = :id")
+    String getStatusContact(int id);
+
+    @Query("SELECT MAX(id) FROM contacts")
+    int getMaxIdContacts();
+
+    @Insert
+    void InsertContact(ContactTable contact);
+
+
     //Groups
     @Query("SELECT name FROM groups WHERE id = :id")
     String getGroupNameById(int id);

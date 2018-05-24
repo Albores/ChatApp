@@ -8,7 +8,7 @@ import android.arch.persistence.room.*;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-@Database(entities = {UsersTable.class, MessagesTable.class, GroupsTable.class, GroupMessagesTable.class}, version = 1, exportSchema = false)
+@Database(entities = {UsersTable.class, MessagesTable.class, GroupsTable.class, GroupMessagesTable.class,ContactTable.class}, version = 1, exportSchema = false)
 
 public abstract class ChatDatabase extends RoomDatabase {
 

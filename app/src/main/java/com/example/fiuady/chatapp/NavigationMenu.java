@@ -51,7 +51,7 @@ public class NavigationMenu extends AppCompatActivity {
 
     private ChatDatabase db;
     private RecyclerView recyclerContainer;
-    private UsersAdapter usersAdapter;
+    private ContactAdapter contactAdapter;
     private ChatsAdapter chatsAdapter;
     private GroupsAdapter groupsAdapter;
     private TextView tvuserperfil;
@@ -69,7 +69,7 @@ public class NavigationMenu extends AppCompatActivity {
 
     private List<Chat> rv_chats_data = new ArrayList<>();
     private List<Group> rv_groups_data = new ArrayList<>();
-    private List<User> rv_users_data = new ArrayList<>();
+    private List<Contact> rv_contact_data = new ArrayList<>();
 
     public class ImageAdapter extends BaseAdapter {
 
@@ -212,17 +212,19 @@ public class NavigationMenu extends AppCompatActivity {
     void fillContactsAdapter() {
         //I'm using Users adapter and class to fill the information since I've not created the Contacts table
         total_users = db.chatDao().getMaxIdUsers() + 1;
-        rv_users_data.clear();
+        rv_contact_data.clear();
         for (int i = 0; i < total_users; i++) {
             if (i != my_id) {
-                rv_users_data.add(new User(
+                rv_contact_data.add(new Contact(
                         i,
-                        db.chatDao().getUserNameById(i),
-                        db.chatDao().getPasswordById(i)));
+                        db.chatDao().getUserNameContactById(i),
+                        db.chatDao().getPasswordContactById(i),
+                        db.chatDao().getStatusContact(i),
+                        db.chatDao().getAvatarContact(i)));
             }
         }
-        usersAdapter = new UsersAdapter((rv_users_data));
-        recyclerContainer.setAdapter(usersAdapter);
+        contactAdapter = new ContactAdapter((rv_contact_data));
+        recyclerContainer.setAdapter(contactAdapter);
     }
 
     @Override
