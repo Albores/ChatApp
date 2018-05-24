@@ -164,28 +164,30 @@ public class NavigationMenu extends AppCompatActivity {
     };
 
     void fillChatsAdapter() {
-//        rv_chats_data.clear();
-//        total_chats = db.chatDao().getMaxChats() + 1;
-//        for (int i = 0; i < total_chats; i++) {
-//            //db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i
-//                rv_chats_data.add(new Chat(
-//                        i,
-//                        db.chatDao().getChatName(i),
-//                        db.chatDao().getTypeChat(i),
-//                        db.chatDao().getLastMessageByChatId(i),
-//                        db.chatDao().getChatDateById(i),
-//                        db.chatDao().getChatParticipants(i)));
-//        }
-//        //Sorting by lastDate of lastMessage received or sent
-//        Collections.sort(rv_chats_data, new Comparator<Chat>() {
-//            @Override
-//            public int compare(Chat o1, Chat o2) {
-//                return o2.getDate().compareTo(o1.getDate());
-//            }
-//        });
-//
-//        chatsAdapter = new ChatsAdapter(rv_chats_data);
-//        recyclerContainer.setAdapter(chatsAdapter);
+        rv_chats_data.clear();
+        total_chats = db.chatDao().getMaxChats() + 1;
+        for (int i = 0; i < total_chats; i++) {
+            //db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i
+            if(db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
+                rv_chats_data.add(new Chat(
+                        i,
+                        db.chatDao().getChatName(i),
+                        db.chatDao().getTypeChat(i),
+                        db.chatDao().getLastMessageByChatId(i),
+                        db.chatDao().getChatDateById(i),
+                        db.chatDao().getChatParticipants(i)));
+            }
+        }
+        //Sorting by lastDate of lastMessage received or sent
+        Collections.sort(rv_chats_data, new Comparator<Chat>() {
+            @Override
+            public int compare(Chat o1, Chat o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
+
+        chatsAdapter = new ChatsAdapter(rv_chats_data);
+        recyclerContainer.setAdapter(chatsAdapter);
     }
 
     void fillGroupsAdapter() {
@@ -215,7 +217,7 @@ public class NavigationMenu extends AppCompatActivity {
         //I'm using Users adapter and class to fill the information since I've not created the Contacts table
         total_contacts = db.chatDao().getMaxIdContacts() + 1;
         rv_contact_data.clear();
-        for (int i = 0; i < total_contacts; i++) {
+        for (int i = 1; i < total_contacts; i++) {
             if (i != ActualUser.id) {//id user
                 rv_contact_data.add(new Contact(
                         i,

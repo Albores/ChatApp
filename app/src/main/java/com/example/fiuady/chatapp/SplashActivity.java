@@ -48,11 +48,11 @@ public class SplashActivity extends Activity {
             @Override
             public void onResponse(JSONObject response) {
                 //Toast.makeText(SplashActivity.this,response.optString("message"), Toast.LENGTH_SHORT).show();
-                if(response.optString("message").equals("ok")){
-                    Intent intent = new Intent(SplashActivity.this, NavigationMenu.class);
+                if(response.optString("message").equals("Credenciales incorrectas")){
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else{
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, NavigationMenu.class);
                     startActivity(intent);
                 }
 
