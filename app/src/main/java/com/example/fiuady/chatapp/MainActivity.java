@@ -553,6 +553,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private String avatar;
     private int id_server_usuario;
+    private int previousSelectedPosition=0;
 
     public class ImageAdapter extends BaseAdapter {
 
@@ -766,6 +767,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                ImageView previousSelectedView = (ImageView) parent.getChildAt(previousSelectedPosition);
+
+                // If there is a previous selected view exists
+                if (previousSelectedPosition != -1) {
+                    // Set the last selected View to deselect
+                    previousSelectedView.setSelected(false);
+
+                    // Set the last selected View background color as deselected item
+                    previousSelectedView.setBackgroundColor(Color.WHITE);
+
+                    // Set the last selected View text color as deselected item
+                    //previousSelectedView.setBackgroundColor(Color.DKGRAY);
+                }
+                // Set the current selected view position as previousSelectedPosition
+                previousSelectedPosition = position;
                 switch (position) {
                     case 0:
                         view.setBackgroundColor(Color.BLUE);

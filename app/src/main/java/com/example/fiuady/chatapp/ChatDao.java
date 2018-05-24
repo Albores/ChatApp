@@ -37,6 +37,18 @@ public interface ChatDao {
     @Query("SELECT MAX(id) FROM users")
     int getMaxIdUsers();
 
+    @Query("update users set avatar =:nava where id =0")
+    void updateAvatar(String nava);
+
+    @Query("update users set status =:nstatus where id =0")
+    void updateStatus(String nstatus);
+
+    @Query("update users set password =:npass where id =0")
+    void updatePassword(String npass);
+
+    @Query("update users set username =:nusername where id =0")
+    void updateUserName(String nusername);
+
     @Insert
     void InsertUser(UsersTable user);
 

@@ -12,6 +12,16 @@
         android:text="Cambiar Estado"
         android:textSize="30sp" />
 
+    <TextView
+        android:id="@+id/actualstatus_tv"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:hint="Estado actual"
+        android:layout_margin="10dp" />
+
     <EditText
         android:id="@+id/newstatus_edtx"
         android:layout_width="match_parent"
@@ -19,12 +29,6 @@
         android:layout_margin="10dp"
         android:textSize="20sp"
         android:hint="Nuevo Estado"
-        android:inputType="textPassword" />
+        android:inputType="text" />
 
-    <Button
-        android:id="@+id/changestatusbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Cambiar" />
 </LinearLayout>
