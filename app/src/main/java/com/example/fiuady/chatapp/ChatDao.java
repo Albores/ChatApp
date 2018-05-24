@@ -25,6 +25,9 @@ public interface ChatDao {
     @Query("Select id from users where username =:username")
     int getIdByUserName(String username);
 
+    @Query("Select id from users where id = :id")
+    int getUserId(int id);
+
     @Query("SELECT password FROM users WHERE id = :id")
     String getPasswordById(int id);
 

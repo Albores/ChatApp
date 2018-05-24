@@ -189,7 +189,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             rvContactId = itemView.findViewById(R.id.hided_contact_id);
-            rvFirstName = itemView.findViewById(R.id.first_name_text);
+            rvFirstName = itemView.findViewById(R.id.username_text);
             rvLastName = itemView.findViewById(R.id.last_name_text);
             rvLastMessage = itemView.findViewById(R.id.last_message_text);
             rvDate = itemView.findViewById(R.id.date_text);

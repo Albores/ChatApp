@@ -38,7 +38,7 @@ public abstract class ChatDatabase extends RoomDatabase {
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (1, 'Marisol a Jose', 4, 3, '20180514 at 00:28 AM')");
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (2, 'Jose a Ger', 3, 1, '20180514 at 00:30 AM')");
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (3, 'Albores a Jose', 2, 3, '20180514 at 00:35 AM')");
-                            db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (4, 'Jose a Saul', 3, 5, '20180514 at 00:40 AM')");
+                            db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (4, 'Jose a Saul', 3, 50, '20180514 at 00:40 AM')");
                             db.execSQL("INSERT INTO messages(id, message, sender_id, receiver_id, date) VALUES (5, 'Ger a Jose, un mensaje largo para probar formato', 1, 3, '20180514 at 02:46 AM')");
 
                             db.execSQL("INSERT INTO groups(id, name, creator_id, admin_id) VALUES (0, 'Las Guapas', 0, 0)");

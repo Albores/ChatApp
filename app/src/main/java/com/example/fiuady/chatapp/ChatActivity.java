@@ -115,7 +115,7 @@ public class ChatActivity extends AppCompatActivity {
             //if(db.messagesDao().getSenderIdByMessageId(i) == contactId || db.messagesDao().getReceiverIdByMessageId(i) == contactId){
             int sender_id = db.chatDao().getSenderIdByMessageId(i);
             int receiver_id = db.chatDao().getReceiverIdByMessageId(i);
-            if((sender_id == contactId && receiver_id == ActualUser.id) || (receiver_id == contactId && sender_id == ActualUser.id)) {
+            if((sender_id == contactId && receiver_id == db.chatDao().getUserId(0)) || (receiver_id == contactId && sender_id == ActualUser.id)) {
                 String msg = db.chatDao().getMessageById(i);
                 rv_messages_data.add(new Message(
                         i,
@@ -264,22 +264,22 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        if (!backPressed) {
-            Toast.makeText(this, "Presionar BACK de nuevo para cerrar", Toast.LENGTH_SHORT).show();
-            backPressed = true;
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    backPressed = false;
-                }
-            }, 2000);
-        }
-        else{
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-            super.onBackPressed();
-        }
+        super.onBackPressed();
+//        if (!backPressed) {
+//            Toast.makeText(this, "Presionar BACK de nuevo para cerrar", Toast.LENGTH_SHORT).show();
+//            backPressed = true;
+//
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    backPressed = false;
+//                }
+//            }, 2000);
+//        }
+//        else{
+//            Intent intent = new Intent();
+//            setResult(RESULT_OK, intent);
+//            super.onBackPressed();
+//        }
     }
 }
