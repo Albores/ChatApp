@@ -121,7 +121,7 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            //nothing
+
         }
 
         public void bind(Contact contact) {
@@ -695,6 +695,17 @@ public class MainActivity extends AppCompatActivity {
     private String URL_Usuarios_username = "https://serverxd.herokuapp.com/api/usernames";
     private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/";
     private String URL_Validacion_Usuarios = "https://serverxd.herokuapp.com/api/users/validate";
+
+    public JSONObject makingJsonChat(String name,String type) {
+        JSONObject js = new JSONObject();
+        try {
+            js.put("name",name );
+            js.put("type", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return js;
+    }
 
     public JSONObject makingJson() {
         JSONObject js = new JSONObject();
