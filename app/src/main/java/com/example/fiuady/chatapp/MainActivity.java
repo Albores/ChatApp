@@ -813,7 +813,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
-                //id_server_usuario = response.optInt("id");
+                id_server_usuario = response.optString("id");
+                ActualUser.id = Integer.parseInt(id_server_usuario);
                 UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
                 db.chatDao().UpdateUser(user);
 
@@ -847,7 +848,7 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
 
                 }else{
-                   // Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+                   Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
                     id_server_usuario = response.optString("id");
                     ActualUser.id = Integer.parseInt(id_server_usuario);
                     //Toast.makeText(MainActivity.this, "id:"+id_server_usuario, Toast.LENGTH_SHORT).show();
@@ -887,7 +888,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
