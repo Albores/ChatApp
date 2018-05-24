@@ -198,18 +198,23 @@ public interface ChatDao {
     @Query("SELECT last_message FROM chats WHERE id = :id")
     String getLastMessageByChatId(int id);
 
-    @Query("SELECT name FROM chats WHERE id = :id")
+    @Query("SELECT chatname FROM chats WHERE id = :id")
     String getChatName(int id);
 
     @Query("SELECT id FROM chats WHERE id = :id")
     int getChatid(int id);
 
+    @Query("select chattype from chats where id=:id")
+    String getTypeChat(int id);
+
     @Query("SELECT MAX(id) FROM chats")
     int getMaxChats();
 
-
     @Query("SELECT date FROM chats WHERE id = :id")
     String getChatDateById(int id);
+
+    @Query("select participants from chats where id=:id")
+    String getChatParticipants(int id);
 
     @Insert
     void InsertChat(ChatsTable chat);

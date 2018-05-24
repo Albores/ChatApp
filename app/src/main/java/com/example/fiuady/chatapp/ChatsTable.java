@@ -13,10 +13,10 @@ public class ChatsTable {
     @ColumnInfo (name = "id")
     private int id;
 
-    @ColumnInfo (name = "name")
+    @ColumnInfo (name = "chatname")
     private String chatname;
 
-    @ColumnInfo (name = "type")
+    @ColumnInfo (name = "chattype")
     @NonNull
     private String chattype;
 
@@ -28,12 +28,17 @@ public class ChatsTable {
     @NonNull
     private String date;
 
-    public ChatsTable(@NonNull int id, String chatname, @NonNull String chattype, @NonNull String last_message, @NonNull String date) {
+    @ColumnInfo (name = "participants")
+    @NonNull
+    private String participants;
+
+    public ChatsTable(@NonNull int id, String chatname, @NonNull String chattype, @NonNull String last_message, @NonNull String date, @NonNull String participants) {
         this.id = id;
         this.chatname = chatname;
         this.chattype = chattype;
         this.last_message = last_message;
         this.date = date;
+        this.participants = participants;
     }
 
     @NonNull
@@ -78,5 +83,14 @@ public class ChatsTable {
 
     public void setDate(@NonNull String date) {
         this.date = date;
+    }
+
+    @NonNull
+    public String getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(@NonNull String participants) {
+        this.participants = participants;
     }
 }

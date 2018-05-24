@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,15 +167,18 @@ class Chat {
     private String chattype;
     private String lastMessage;
     private String date;
+    private String participants;
     //private String phoneNumber;
     //private String password;
 
-    public Chat(int chatid, String chatname, String chattype, String lastMessage, String date) {
+
+    public Chat(int chatid, String chatname, String chattype, String lastMessage, String date, String participants) {
         this.chatid = chatid;
         this.chatname = chatname;
         this.chattype = chattype;
         this.lastMessage = lastMessage;
         this.date = date;
+        this.participants = participants;
     }
 
     public int getChatid() {
@@ -216,6 +220,14 @@ class Chat {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public String getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(String participants) {
+        this.participants = participants;
+    }
 }
 
 class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
@@ -227,6 +239,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
         private TextView rvchattype;
         private TextView rvLastMessage;
         private TextView rvDate;
+        private TextView rvchatparticipants;
         private Chat chat;
         private Context context;
 
@@ -237,6 +250,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
             rvchattype = itemView.findViewById(R.id.chattype_text);
             rvLastMessage = itemView.findViewById(R.id.last_message_text);
             rvDate = itemView.findViewById(R.id.date_text);
+            rvchatparticipants = itemView.findViewById(R.id.chatparticipants_text);
 
             context = itemView.getContext();
             itemView.setClickable(true);
@@ -259,6 +273,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
             rvchattype.setText(chats.getChattype());
             rvLastMessage.setText(chats.getLastMessage());
             rvDate.setText(chats.getDate());
+            rvchatparticipants.setText(chats.getParticipants());
         }
 
     }
