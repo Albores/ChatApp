@@ -83,15 +83,19 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView rvusername;
-        private TextView rvId;
+        private TextView rvusernamecontact;
+        private TextView rvidcontact;
+        private ImageView rvavatarcontact;
+        private TextView rvstatuscontact;
         private User user;
         private Context context;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            rvusername = itemView.findViewById(R.id.username_text);
-            rvId = itemView.findViewById(R.id.hided_user_id);
+            rvusernamecontact = itemView.findViewById(R.id.usernamecontact_text);
+            rvidcontact = itemView.findViewById(R.id.hided_user_id);
+            rvavatarcontact = itemView.findViewById(R.id.avatarcontact_iv);
+            rvstatuscontact = itemView.findViewById(R.id.statuscontact_text);
             context = itemView.getContext();
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
@@ -104,8 +108,8 @@ class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
         public void bind(User users) {
             this.user = users;
-            rvusername.setText(users.getUsername());
-            rvId.setText(String.valueOf(users.getId()));
+            rvusernamecontact.setText(users.getUsername());
+            rvidcontact.setText(String.valueOf(users.getId()));
         }
 
     }
@@ -189,8 +193,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             rvContactId = itemView.findViewById(R.id.hided_contact_id);
-            rvFirstName = itemView.findViewById(R.id.username_text);
-            rvLastName = itemView.findViewById(R.id.last_name_text);
+            rvFirstName = itemView.findViewById(R.id.senderusername_text);
             rvLastMessage = itemView.findViewById(R.id.last_message_text);
             rvDate = itemView.findViewById(R.id.date_text);
 
