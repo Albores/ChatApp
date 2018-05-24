@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +59,9 @@ public class NavigationMenu extends AppCompatActivity {
     private ImageView avatarToolBar;
     private TextView actualusername;
     private int previousSelectedPosition = 0;
+    private FloatingActionButton fabsettings;
+    private FloatingActionButton fabmessages;
+    private Boolean fabExpanded = false;
 
     private int my_id = ActualUser.id;
     private int total_users;
@@ -236,14 +241,47 @@ public class NavigationMenu extends AppCompatActivity {
         recyclerContainer.setLayoutManager(new LinearLayoutManager(this));
         tvuserperfil = findViewById(R.id.user_perfil);
         avatarToolBar = findViewById(R.id.app_bar_image);
+        fabmessages = findViewById(R.id.fab_messages);
+        fabsettings = findViewById(R.id.fab_settings);
         tvuserperfil.setText(db.chatDao().getUserNameById(0));
         changeToolBarImage();
         fillChatsAdapter(); //Starts activity with chatsAdapter
 
+        fabsettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (fabExpanded == true) {
+                    closeSubMenusFab();
+                } else {
+                    openSubMenusFab();
+                }
+            }
+        });
+        closeSubMenusFab();
+        fabmessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
     }
 
-    private void changeToolBarImage(){
+    //closes FAB submenus
+    private void closeSubMenusFab() {
+        fabmessages.setVisibility(View.INVISIBLE);
+        fabsettings.setImageResource(R.drawable.ic_settings_black_24dp);
+        fabExpanded = false;
+    }
+
+    //Opens FAB submenus
+    private void openSubMenusFab() {
+        fabmessages.setVisibility(View.VISIBLE);
+        fabsettings.setImageResource(R.drawable.ic_cancel_black_24dp);
+        fabExpanded = true;
+    }
+
+    private void changeToolBarImage() {
         avatar = db.chatDao().getAvatarUser(0);
         switch (avatar) {
             case "avatar_0":
@@ -266,6 +304,7 @@ public class NavigationMenu extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
