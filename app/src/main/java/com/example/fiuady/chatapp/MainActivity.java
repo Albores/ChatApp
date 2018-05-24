@@ -161,39 +161,59 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 }
 
 class Chat {
-    private int contactId;
-    private String firstName;
-    private String lastName;
+    private int chatid;
+    private String chatname;
+    private String chattype;
     private String lastMessage;
     private String date;
     //private String phoneNumber;
     //private String password;
 
-    public int getContactId() {
-        return contactId;
+    public Chat(int chatid, String chatname, String chattype, String lastMessage, String date) {
+        this.chatid = chatid;
+        this.chatname = chatname;
+        this.chattype = chattype;
+        this.lastMessage = lastMessage;
+        this.date = date;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public int getChatid() {
+        return chatid;
     }
 
-    public String getLastName() {
-        return lastName;
+    public void setChatid(int chatid) {
+        this.chatid = chatid;
+    }
+
+    public String getChatname() {
+        return chatname;
+    }
+
+    public void setChatname(String chatname) {
+        this.chatname = chatname;
+    }
+
+    public String getChattype() {
+        return chattype;
+    }
+
+    public void setChattype(String chattype) {
+        this.chattype = chattype;
     }
 
     public String getLastMessage() {
         return lastMessage;
     }
 
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
     public String getDate() {
         return date;
     }
 
-    public Chat(int contactId, String firstName, String lastName, String lastMessage, String date) {
-        this.contactId = contactId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.lastMessage = lastMessage;
+    public void setDate(String date) {
         this.date = date;
     }
 }
@@ -202,9 +222,9 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView rvContactId;
-        private TextView rvFirstName;
-        private TextView rvLastName;
+        private TextView rvchatid;
+        private TextView rvchatname;
+        private TextView rvchattype;
         private TextView rvLastMessage;
         private TextView rvDate;
         private Chat chat;
@@ -212,8 +232,9 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            rvContactId = itemView.findViewById(R.id.hided_contact_id);
-            rvFirstName = itemView.findViewById(R.id.senderusername_text);
+            rvchatid = itemView.findViewById(R.id.hided_contact_id);
+            rvchatname = itemView.findViewById(R.id.senderusername_text);
+            rvchattype = itemView.findViewById(R.id.chattype_text);
             rvLastMessage = itemView.findViewById(R.id.last_message_text);
             rvDate = itemView.findViewById(R.id.date_text);
 
@@ -225,7 +246,7 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, ChatActivity.class);
-            intent.putExtra(ChatActivity.EXTRA_HIDED_ID, rvContactId.getText().toString());
+            intent.putExtra(ChatActivity.EXTRA_HIDED_ID, rvchatid.getText().toString());
             intent.putExtra(ChatActivity.EXTRA_SIMPLE_CHAT, true);
             ((Activity) context).startActivityForResult(intent, 0X01);
 
@@ -233,9 +254,9 @@ class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
         public void bind(Chat chats) {
             this.chat = chats;
-            rvContactId.setText(String.valueOf(chats.getContactId()));
-            rvFirstName.setText(chats.getFirstName());
-            rvLastName.setText(chats.getLastName());
+            rvchatid.setText(chats.getChatid());
+            rvchatname.setText(chats.getChatname());
+            rvchattype.setText(chats.getChattype());
             rvLastMessage.setText(chats.getLastMessage());
             rvDate.setText(chats.getDate());
         }
@@ -575,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
     private int destinyId;
     private GridView gridView;
     private String avatar;
-    private int id_server_usuario;
+    public String id_server_usuario="0";
     private int previousSelectedPosition = 0;
     private List<Contact> contactsList;
 
@@ -672,7 +693,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String URL_Usuarios = "https://serverxd.herokuapp.com/api/users";
     private String URL_Usuarios_username = "https://serverxd.herokuapp.com/api/usernames";
-    private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/50";
+    private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/";
     private String URL_Validacion_Usuarios = "https://serverxd.herokuapp.com/api/users/validate";
 
     public JSONObject makingJson() {
@@ -781,7 +802,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
-                id_server_usuario = response.optInt("id");
+                //id_server_usuario = response.optInt("id");
                 UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
                 db.chatDao().UpdateUser(user);
 
@@ -808,13 +829,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
 
-                if (response.optString("message").equals("ok")) {
+                if (response.optString("message").equals("Credenciales incorrectas")) {
                     //UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), db.chatDao().getStatusUser(0), db.chatDao().getAvatarUser(0));
                     //UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), db.chatDao().getStatusUser(0), db.chatDao().getAvatarUser(0));
                     // db.chatDao().UpdateUser(user);
-                    Toast.makeText(MainActivity.this, "Response"+response.optString("id"), Toast.LENGTH_SHORT).show();
-                    receiveJsonUserRequest(URL_Usuarios_id);
+                    //Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
 
+                }else{
+                   // Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+                    id_server_usuario = response.optString("id");
+                    ActualUser.id = Integer.parseInt(id_server_usuario);
+                    //Toast.makeText(MainActivity.this, "id:"+id_server_usuario, Toast.LENGTH_SHORT).show();
+                    receiveJsonUserRequest(URL_Usuarios_id);
                 }
 
 
@@ -837,10 +863,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void receiveJsonUserRequest(String URL) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, URL+id_server_usuario, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(MainActivity.this, "Response " + response, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Response " + response, Toast.LENGTH_SHORT).show();
                 UsersTable user = new UsersTable(0, response.optString("username"), response.optString("password"), response.optString("status"), response.optString("avatar"));
                 db.chatDao().UpdateUser(user);
                 Intent intent = new Intent(MainActivity.this, NavigationMenu.class);
@@ -850,7 +876,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Response Error", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -879,7 +905,7 @@ public class MainActivity extends AppCompatActivity {
 //        UsersTable uno = db.chatDao().getUserByLastName("Chan");
 //        uno.setFirstName("Jose");
 //        db.chatDao().UpdateUser(uno);
-        ActualUser.id = id_server_usuario;
+
         gridView.setAdapter(new ImageAdapter(this));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

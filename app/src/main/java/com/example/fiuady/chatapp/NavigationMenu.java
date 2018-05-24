@@ -66,6 +66,7 @@ public class NavigationMenu extends AppCompatActivity {
     private int my_id = ActualUser.id;
     private int total_contacts;
     private int total_users;
+    private int total_chats;
     private int total_groups;
 
     private List<Chat> rv_chats_data = new ArrayList<>();
@@ -164,8 +165,8 @@ public class NavigationMenu extends AppCompatActivity {
 
     void fillChatsAdapter() {
         rv_chats_data.clear();
-        total_users = db.chatDao().getMaxIdUsers() + 1;
-        for (int i = 0; i < total_users; i++) {
+        total_chats = db.chatDao().getMaxChats() + 1;
+        for (int i = 0; i < total_chats; i++) {
             if (db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
                 rv_chats_data.add(new Chat(
                         i,
@@ -215,7 +216,7 @@ public class NavigationMenu extends AppCompatActivity {
         total_contacts = db.chatDao().getMaxIdContacts() + 1;
         rv_contact_data.clear();
         for (int i = 0; i < total_contacts; i++) {
-            if (i != 50) {//id user
+            if (i != ActualUser.id) {//id user
                 rv_contact_data.add(new Contact(
                         i,
                         db.chatDao().getUserNameContactById(i),
@@ -315,7 +316,7 @@ public class NavigationMenu extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/50";
+    private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/";
 
     public JSONObject makingJson() {
         JSONObject js = new JSONObject();
@@ -332,10 +333,10 @@ public class NavigationMenu extends AppCompatActivity {
 
     public void sendJsonUserUpdateRequest(String URL) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.PUT, URL, makingJson(), new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.PUT, URL+String.valueOf(ActualUser.id), makingJson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(NavigationMenu.this, "Response" + response, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NavigationMenu.this, "Response" + response, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
