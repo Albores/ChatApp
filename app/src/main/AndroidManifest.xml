@@ -29,6 +29,8 @@
         <activity
             android:name=".NavigationMenu"
             android:label="@string/app_name" />
+        <activity android:name=".CreateChat"
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

@@ -131,7 +131,10 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent(context, CreateChat.class);
+            intent.putExtra(ChatActivity.EXTRA_HIDED_ID, rvusernamecontact.getText());
+            //intent.putExtra(ChatActivity.EXTRA_SIMPLE_CHAT, true);
+            ((Activity) context).startActivityForResult(intent, 0X01);
         }
 
         public void bind(Contact contact) {
