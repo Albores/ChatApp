@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:hint="Estado actual"
+            android:hint="Contacto"
             android:layout_margin="10dp" />
     </LinearLayout>
 
@@ -35,6 +35,14 @@
         android:layout_margin="10dp"
         android:text="Nombre de chat:"
         android:textSize="20sp" />
+    <EditText
+        android:id="@+id/chatname_edtx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="20sp"
+        android:hint="Nombre de Chat"
+        android:inputType="text" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,4 +51,14 @@
         android:layout_margin="10dp"
         android:text="Participantes:"
         android:textSize="20sp" />
+    <TextView
+        android:id="@+id/participantschat_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_margin="10dp"
+        android:text="Participantes"
+        android:textSize="20sp" />
+
+
 </LinearLayout>
