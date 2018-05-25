@@ -100,10 +100,34 @@ class Contact {
         return avatar;
     }
 
-
-
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Drawable getAvatarImg(String avtrid, Context context) {
+        Resources res = context.getResources();
+        Drawable avtr = res.getDrawable(R.drawable.avatar_1);
+        ;
+        if (avtrid.equals("avatar_0")) {
+            avtr = res.getDrawable(R.drawable.avatar_1);
+            return avtr;
+        } else if (avtrid.equals("avatar_1")) {
+            avtr = res.getDrawable(R.drawable.avatar_2);
+            return avtr;
+        } else if (avtrid.equals("avatar_2")) {
+            avtr = res.getDrawable(R.drawable.avatar_3);
+            return avtr;
+        } else if (avtrid.equals("avatar_3")) {
+            avtr = res.getDrawable(R.drawable.avatar_4);
+            return avtr;
+        } else if (avtrid.equals("avatar_4")) {
+            avtr = res.getDrawable(R.drawable.avatar_5);
+            return avtr;
+        } else if (avtrid.equals("avatar_5")) {
+            avtr = res.getDrawable(R.drawable.avatar_6);
+            return avtr;
+        }
+        return avtr;
     }
 }
 
@@ -142,8 +166,9 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
             rvusernamecontact.setText(contact.getUsername());
             rvidcontact.setText(String.valueOf(contact.getId()));
             rvstatuscontact.setText(contact.getStatus());
+            rvavatarcontact.setImageDrawable(contact.getAvatarImg(contact.getAvatar(), context));
             //rvavatarcontact.setImageResource(Integer.parseInt(contact.getAvatar()));
-           // String uri ="R.drawable."+contact.getAvatar();
+            // String uri ="R.drawable."+contact.getAvatar();
             //rvavatarcontact.setImageDrawable(ContextCompat.getDrawable(context,Integer.parseInt(uri)));
 
 
@@ -244,6 +269,8 @@ class Chat {
     public void setParticipants(String participants) {
         this.participants = participants;
     }
+
+
 }
 
 class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
@@ -626,8 +653,8 @@ public class MainActivity extends AppCompatActivity {
     private int originPort;
     private int destinyId;
     private GridView gridView;
-    private String avatar ="avatar_0";
-    public String id_server_usuario="0";
+    private String avatar = "avatar_0";
+    public String id_server_usuario = "0";
     private int previousSelectedPosition = 0;
     private List<Contact> contactsList;
 
@@ -727,10 +754,10 @@ public class MainActivity extends AppCompatActivity {
     private String URL_Usuarios_id = "https://serverxd.herokuapp.com/api/users/";
     private String URL_Validacion_Usuarios = "https://serverxd.herokuapp.com/api/users/validate";
 
-    public JSONObject makingJsonChat(String name,String type) {
+    public JSONObject makingJsonChat(String name, String type) {
         JSONObject js = new JSONObject();
         try {
-            js.put("name",name );
+            js.put("name", name);
             js.put("type", type);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -878,8 +905,8 @@ public class MainActivity extends AppCompatActivity {
                     // db.chatDao().UpdateUser(user);
                     //Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
 
-                }else{
-                   //Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(MainActivity.this, "Response" + response, Toast.LENGTH_SHORT).show();
                     id_server_usuario = response.optString("id");
                     ActualUser.id = Integer.parseInt(id_server_usuario);
                     //Toast.makeText(MainActivity.this, "id:"+id_server_usuario, Toast.LENGTH_SHORT).show();
@@ -906,7 +933,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void receiveJsonUserRequest(String URL) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, URL+id_server_usuario, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, URL + id_server_usuario, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 //Toast.makeText(MainActivity.this, "Response " + response, Toast.LENGTH_SHORT).show();

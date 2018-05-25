@@ -12,21 +12,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateChat extends AppCompatActivity {
     private TextView contact;
     private TextView participants;
     private Button createchat;
     private EditText chatname;
-    private CheckedTextView simplechat;
-    private CheckedTextView grupalchat;
     private ChatDatabase db;
-    private String type="";
+    private String type="0";
     private String parti="";
-
-    public JSONObject makingJson() {
+    private String URL_Chats = "https://serverxd.herokuapp.com/api/chats";
+    public JSONObject makingSimpleChatJson() {
         JSONObject js = new JSONObject();
         try {
             js.put("name",chatname.getText());
@@ -39,6 +48,30 @@ public class CreateChat extends AppCompatActivity {
         return js;
     }
 
+    public void sendJsonChatRequest(String URL) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, URL, makingSimpleChatJson(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(CreateChat.this, "Response" + response, Toast.LENGTH_SHORT).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(CreateChat.this, "Response Error", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(jsonRequest);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +80,6 @@ public class CreateChat extends AppCompatActivity {
         participants = findViewById(R.id.participantschat_text);
         createchat = findViewById(R.id.chatcreate_btn);
         chatname = findViewById(R.id.chatname_edtx);
-        simplechat = findViewById(R.id.simplechat_cktx);
-        grupalchat = findViewById(R.id.grupal_cktx);
         db = ChatDatabase.getDatabase(CreateChat.this);
 
         Intent intent = getIntent();
@@ -57,27 +88,16 @@ public class CreateChat extends AppCompatActivity {
         parti = contactusername+","+db.chatDao().getUserNameById(0);
         participants.setText(parti);
 
-        simplechat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                type ="0";
-                Toast.makeText(CreateChat.this, type, Toast.LENGTH_SHORT).show();
-            }
-        });
-        grupalchat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                type="1";
-                Toast.makeText(CreateChat.this, type, Toast.LENGTH_SHORT).show();
-            }
-        });
         createchat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Snackbar snack = Snackbar.make(v, "Se ha creado el chat", Snackbar.LENGTH_SHORT);
                 snack.show();
+                sendJsonChatRequest(URL_Chats);
             }
         });
+
+
 
     }
 }
