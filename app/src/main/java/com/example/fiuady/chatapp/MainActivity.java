@@ -139,7 +139,11 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
             rvusernamecontact.setText(contact.getUsername());
             rvidcontact.setText(String.valueOf(contact.getId()));
             rvstatuscontact.setText(contact.getStatus());
-            rvavatarcontact.setImageResource(Integer.parseInt(contact.getAvatar()));
+            //rvavatarcontact.setImageResource(Integer.parseInt(contact.getAvatar()));
+           // String uri ="R.drawable."+contact.getAvatar();
+            //rvavatarcontact.setImageDrawable(ContextCompat.getDrawable(context,Integer.parseInt(uri)));
+
+
         }
 
     }
