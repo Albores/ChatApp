@@ -165,10 +165,10 @@ public class NavigationMenu extends AppCompatActivity {
 
     void fillChatsAdapter() {
         rv_chats_data.clear();
-        total_chats = db.chatDao().getMaxChats() + 1;
+        total_chats = db.chatDao().getMaxChats();
         for (int i = 0; i < total_chats; i++) {
             //db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i
-            if(db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
+           // if(db.chatDao().checkStartedChatWithContact(i, my_id) > 0 && my_id != i) {
                 rv_chats_data.add(new Chat(
                         i,
                         db.chatDao().getChatName(i),
@@ -176,15 +176,15 @@ public class NavigationMenu extends AppCompatActivity {
                         db.chatDao().getLastMessageByChatId(i),
                         db.chatDao().getChatDateById(i),
                         db.chatDao().getChatParticipants(i)));
-            }
+
         }
         //Sorting by lastDate of lastMessage received or sent
-        Collections.sort(rv_chats_data, new Comparator<Chat>() {
-            @Override
-            public int compare(Chat o1, Chat o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+//        Collections.sort(rv_chats_data, new Comparator<Chat>() {
+//            @Override
+//            public int compare(Chat o1, Chat o2) {
+//                return o2.getDate().compareTo(o1.getDate());
+//            }
+//        });
 
         chatsAdapter = new ChatsAdapter(rv_chats_data);
         recyclerContainer.setAdapter(chatsAdapter);

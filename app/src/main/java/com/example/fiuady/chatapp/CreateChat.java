@@ -23,6 +23,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,13 +34,20 @@ public class CreateChat extends AppCompatActivity {
     private Button createchat;
     private EditText chatname;
     private ChatDatabase db;
-    private String type="0";
-    private String parti="";
+    private String type = "0";
+    private String parti = "";
     private String URL_Chats = "https://serverxd.herokuapp.com/api/chats";
+
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd 'at' HH:mm a");
+        String currentDate = sdf.format(new Date());
+        return currentDate;
+    }
+
     public JSONObject makingSimpleChatJson() {
         JSONObject js = new JSONObject();
         try {
-            js.put("name",chatname.getText());
+            js.put("name", chatname.getText());
             js.put("type", type);
             js.put("participants", parti);
 
@@ -54,7 +63,9 @@ public class CreateChat extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(CreateChat.this, "Response" + response, Toast.LENGTH_SHORT).show();
-
+                //ChatsTable chat = new ChatsTable(db.chatDao().getMaxChats() + 1, response.optString("name"),
+                     //   response.optString("type"), "", getCurrentDate(), response.optString("participants"));
+               // db.chatDao().InsertChat(chat);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -85,7 +96,7 @@ public class CreateChat extends AppCompatActivity {
         Intent intent = getIntent();
         String contactusername = intent.getStringExtra(ChatActivity.EXTRA_HIDED_ID);
         contact.setText(contactusername);
-        parti = contactusername+","+db.chatDao().getUserNameById(0);
+        parti = contactusername + "," + db.chatDao().getUserNameById(0);
         participants.setText(parti);
 
         createchat.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +107,6 @@ public class CreateChat extends AppCompatActivity {
                 sendJsonChatRequest(URL_Chats);
             }
         });
-
 
 
     }

@@ -1050,11 +1050,18 @@ public class MainActivity extends AppCompatActivity {
         register_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), "Disponible", avatar);
-                db.chatDao().UpdateUser(user);
-                makingJson();
-                sendJsonUserRequest(URL_Usuarios);
-                Toast.makeText(MainActivity.this, "USuario Registrado", Toast.LENGTH_SHORT).show();
+                if(user_name.length()==0 | user_pass.length()==0){
+                    Snackbar snack = Snackbar.make(v, "Por favor, llene los campos correctamente.", Snackbar.LENGTH_LONG);
+                    snack.show();
+                }else {
+                    UsersTable user = new UsersTable(0, user_name.getText().toString(), user_pass.getText().toString(), "Disponible", avatar);
+                    db.chatDao().UpdateUser(user);
+                    makingJson();
+                    sendJsonUserRequest(URL_Usuarios);
+                    Snackbar snack = Snackbar.make(v, "Usuario registrado correctamente.", Snackbar.LENGTH_LONG);
+                    snack.show();
+                }
+
             }
         });
 
