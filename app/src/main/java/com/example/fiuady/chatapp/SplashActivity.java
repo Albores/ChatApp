@@ -52,6 +52,7 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else{
+                    ActualUser.id=response.optInt("id");
                     Intent intent = new Intent(SplashActivity.this, NavigationMenu.class);
                     startActivity(intent);
                 }
