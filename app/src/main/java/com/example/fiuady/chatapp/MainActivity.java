@@ -3,6 +3,7 @@ package com.example.fiuady.chatapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -112,7 +113,7 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
         private TextView rvusernamecontact;
         private TextView rvidcontact;
-        private TextView rvavatarcontact;
+        private ImageView rvavatarcontact;
         private TextView rvstatuscontact;
         private Contact contact;
         private Context context;
@@ -138,7 +139,7 @@ class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
             rvusernamecontact.setText(contact.getUsername());
             rvidcontact.setText(String.valueOf(contact.getId()));
             rvstatuscontact.setText(contact.getStatus());
-            rvavatarcontact.setText(contact.getAvatar());
+            rvavatarcontact.setImageResource(Integer.parseInt(contact.getAvatar()));
         }
 
     }
